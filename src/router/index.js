@@ -1,23 +1,63 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import Login from '../views/auth/Login.vue'
+import Register from '../views/auth/Register.vue'
+import Contract from '../views/auth/Contract.vue'
+import AccountDetail from '../views/auth/AccountDetail.vue'
+import Home from '../views/user/Home.vue'
+import DocumentForm from '../views/user/DocumentForm.vue'
+import Appointment from '../views/user/Appointment.vue'
+import Appraise from '../views/user/AppraiseStep.vue'
+import UserList from '../views/admin/UserList.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
+    name: 'Login',
+    component: Login
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    component: Register
+  },
+  {
+    path: '/contract',
+    name: 'Contract',
+    component: Contract
+  },
+  {
+    path: '/home',
     name: 'Home',
     component: Home
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
+    path: '/docForm',
+    name: 'DocumentForm',
+    component: DocumentForm
+  },
+  {
+    path: '/appointment',
+    name: 'Appointment',
+    component: Appointment
+  },
+  {
+    path: '/userList',
+    name: 'UserList',
+    component: UserList
+  },
+  {
+    path: '/appraise',
+    name: 'Appraise',
+    component: Appraise
+  },
+  {
+    path: '/detail',
+    name: 'AccountDetail',
+    component: AccountDetail
+  },
 ]
 
 const router = new VueRouter({
