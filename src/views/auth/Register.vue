@@ -1,6 +1,6 @@
 <template>
   <div class="h-100">
-      <Header tab='Register'></Header>
+      <Header tab='Register' :back=true></Header>
       <div class="content">
           <div class="mt-3">
               <img class="logo" src="/icons/ccs-logo.png" alt="">

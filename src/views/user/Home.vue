@@ -1,15 +1,15 @@
 <template>
   <div class="h-100">
-      <div class="flex">
-              <div class="home_btn">
+        <div class="flex">
+            <div class="home_btn">
                 <button @click="backBtn" class="back">&#60;</button>
-              </div>
-              <div class="noti_btn">
-                  <img src="/icons/noti-btn.png" alt="">
-                  <br>
-                  <span>แจ้งเตือน</span>
-              </div>
-          </div>
+            </div>
+            <div class="noti_btn">
+                <img src="/icons/noti-btn.png" alt="">
+                <br>
+                <span>แจ้งเตือน</span>
+            </div>
+        </div>
       <div class="content">
         <b-row class="flex text-center w-100 mb-5 deleted-margin">
             <b-col class="h-100">
@@ -24,7 +24,7 @@
         </b-row>
         <b-row class="flex text-center h-25 w-100 deleted-margin">
             <b-col class="h-full">
-                <button @click="documentBtn" class="button yellow w-75 py-2 my-2">
+                <button @click="requestListBtn" class="button yellow w-75 py-2 my-2">
                     <img class="w-75 h-75" src="/icons/doc-btn.png" alt="">
                 </button>
                 <br>
@@ -78,8 +78,8 @@ export default {
         backBtn(){
             this.$router.go(-1)
         },
-        documentBtn(){
-            this.$router.push('/docForm')
+        requestListBtn(){
+            this.$router.push('/request')
         },
         requestBtn(){
             this.$router.push('/appraise')
