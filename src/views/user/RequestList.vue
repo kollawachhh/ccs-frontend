@@ -30,7 +30,7 @@
                             </tr>
                     </tbody>
                 </div>
-                <button @click="addBtn" class="mt-2 addBtn px-3 py-1">Send request</button>
+                <button v-if="role === 'Customer'" @click="addBtn" class="mt-2 addBtn px-3 py-1">Send request</button>
             </table>
         </div>
         <Footer></Footer>

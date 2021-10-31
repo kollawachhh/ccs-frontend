@@ -172,7 +172,7 @@ export default {
                         'Your documents has been submit.',
                         'success'
                     )
-                    this.$router.push('/appraise')
+                    this.$router.push('/request')
                 }
                 else{
                     Swal.fire(
