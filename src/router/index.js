@@ -5,17 +5,13 @@ import Register from '../views/auth/Register.vue'
 import Contract from '../views/auth/Contract.vue'
 import AccountDetail from '../views/auth/AccountDetail.vue'
 import Home from '../views/user/Home.vue'
-import RequestList from '../views/user/RequestList.vue'
 import RequestDetail from '../views/user/RequestDetail.vue'
 import DocumentForm from '../views/user/DocumentForm.vue'
 import Appointment from '../views/user/Appointment.vue'
 import Appraise from '../views/user/AppraiseStep.vue'
 import UserList from '../views/admin/UserList.vue'
-<<<<<<< HEAD
 import UserForm from '../views/admin/UserForm.vue'
-=======
 import Request from '../views/user/RequestList.vue'
->>>>>>> 55aa49677bfb109fe39d391056fc52aa0108b6ec
 
 Vue.use(VueRouter)
 
@@ -43,7 +39,7 @@ const routes = [
   {
     path: '/request',
     name: 'RequestList',
-    component: RequestList
+    component: Request
   },
   {
     path: '/request/:id',

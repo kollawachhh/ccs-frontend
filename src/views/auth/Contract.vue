@@ -1,18 +1,10 @@
 <template>
     <div class="h-100">
-<<<<<<< HEAD
         <div class="home_btn">
             <button @click="backBtn" class="flex back mx-2">&#60;</button>
         </div>
         <div class="flex w-100 admin-text">
             <span class="admin px-5 mx-auto">Admin</span>
-=======
-        <div class="w-100 h-10 admin-text">
-            <b-row class="flex text-center h-100 w-100 deleted-margin">
-                <b-col><button @click="backBtn" class="flex back">&#60;</button></b-col>
-                <b-col class="w-100" cols="6"><span class=" admin px-5 py-2 mt-3 ">Admin</span></b-col>
-            </b-row>
->>>>>>> 55aa49677bfb109fe39d391056fc52aa0108b6ec
         </div>
         <div class="w-100 h-25 mb-3">
             <img class="background" src="/images/contract-img.png" alt="">
@@ -58,19 +50,12 @@
 
 <script>
 export default {
-<<<<<<< HEAD
     
-=======
->>>>>>> 55aa49677bfb109fe39d391056fc52aa0108b6ec
     methods:{
         backBtn(){
             this.$router.go(-1)
         },
-<<<<<<< HEAD
     },
-=======
-    }
->>>>>>> 55aa49677bfb109fe39d391056fc52aa0108b6ec
 }
 </script>
 

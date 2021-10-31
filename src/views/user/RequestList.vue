@@ -1,6 +1,5 @@
 <template>
     <div class="w-100 h-100">
-<<<<<<< HEAD
         <Header tab="CCs" :back=true></Header>
         <div class="content_wrapper w-90 mt-4 mx-auto">
             <div class="header_content w-100">
@@ -11,33 +10,17 @@
                 <select v-model="date.month" class="flex w-50 search_bar mx-auto">
                     <option v-for="(month, index) in months" :key="index" :value='month.name' class="bg-white text-primary">{{ month.name + ' - ' + date.year }}</option>
                 </select>
-=======
-        <Header tab="CCs" :back = true></Header>
-        <div class="content_wrapper w-90 mt-4 mx-auto">
-            <div class="header_content w-100">
-                <div class="flex w-100 h-100">
-                    <span class="flex my-3  mx-auto">รายชื่อลูกค้าที่ขอประเมิน</span>
-                </div>
->>>>>>> 55aa49677bfb109fe39d391056fc52aa0108b6ec
             </div>
             <table class="w-100 h-90">
                 <thead class="w-100 table_head">
                     <tr class="flex my-2 w-100">
-<<<<<<< HEAD
                         <th id="id" class="id">Type</th>
                         <th id="name" class="name">Date</th>
                         <th id="login" class="login">Status</th>
-=======
-                        <th class="no">อันดับ</th>
-                        <th class="type">ประเภท</th>
-                        <th class="date">วันที่</th>
-                        <th class="status">สถานะ</th>
->>>>>>> 55aa49677bfb109fe39d391056fc52aa0108b6ec
                     </tr>
                 </thead>
                 <div id="table_body" class="flex w-100 mt-2">
                     <tbody class="w-100">
-<<<<<<< HEAD
                             <tr v-for="(request, index) in resultQuery" :key="index" class="flex w-100 py-1 row">
                                 <button class="flex w-100" @click="getDetail(request.id)">
                                     <td id="id">{{request.type}}</td>
@@ -48,17 +31,6 @@
                     </tbody>
                 </div>
                 <button @click="addBtn" class="mt-2 addBtn px-3 py-1">Send request</button>
-=======
-                        <tr id="row" class="flex py-1">
-                            <td id="no">1</td>
-                            <td id="type">Building</td>
-                            <td id="date">00/00/00</td>
-                            <td id="status">ตรวจสอบเอกสาร</td>
-                        </tr>                       
-                    </tbody>
-                </div>
-                
->>>>>>> 55aa49677bfb109fe39d391056fc52aa0108b6ec
             </table>
         </div>
         <Footer></Footer>
@@ -68,7 +40,6 @@
 <script>
 import Header from '../../components/Header.vue'
 import Footer from '../../components/Footer.vue'
-<<<<<<< HEAD
 import CustomerStore from "@/store/Customer"
 import EmployeeStore from "@/store/Employee"
 import AuthUser from "@/store/AuthUser"
@@ -101,14 +72,10 @@ export default {
             ],
         }
     },
-=======
-export default {
->>>>>>> 55aa49677bfb109fe39d391056fc52aa0108b6ec
     components:{
         Header,
         Footer
     },
-<<<<<<< HEAD
     mounted(){
         if (!this.isAuthen()) {
             Swal.fire({
@@ -170,8 +137,6 @@ export default {
             }
         }
     }
-=======
->>>>>>> 55aa49677bfb109fe39d391056fc52aa0108b6ec
 }
 </script>
 
@@ -182,13 +147,7 @@ export default {
         border-radius: 10px;
         .header_content{
             color: white;
-<<<<<<< HEAD
             height: 10%;
-=======
-            line-height:200%;
-            height: 10%;
-            font-weight:bold;
->>>>>>> 55aa49677bfb109fe39d391056fc52aa0108b6ec
             background-color: #0B4870;
             border-radius: 10px;
         }
@@ -203,16 +162,11 @@ export default {
         }
         #table_body{
             overflow-y: scroll;
-<<<<<<< HEAD
             height: 90%;
-=======
-            height: 95%;
->>>>>>> 55aa49677bfb109fe39d391056fc52aa0108b6ec
         }
         #row{
             border-bottom: 1px solid #000000;
         }
-<<<<<<< HEAD
         #id{
             width: 33%;
             height: 75%;
@@ -240,34 +194,6 @@ export default {
             border-radius: 5px;
             border: 0px;
             background-color: #0B4870;
-=======
-        .no{
-            width:15%;
-            border-right: 2px solid #000000;
-        }
-        .type{
-            width:20%;
-        }
-        .date{
-            width:30%;
-            border-left: 2px solid #000000;
-            border-right: 2px solid #000000;
-        }
-        .status{
-            width:35%;
-        }
-        #no{
-            width:15%;
-        }
-        #type{
-            width:20%;
-        }
-        #date{
-            width:30%;
-        }
-        #status{
-            width:35%;
->>>>>>> 55aa49677bfb109fe39d391056fc52aa0108b6ec
         }
     }
 </style>

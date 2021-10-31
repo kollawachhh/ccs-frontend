@@ -1,5 +1,4 @@
 <template>
-<<<<<<< HEAD
     <div class="h-100">
         <div class="flex">
               <div class="home_btn">
@@ -30,28 +29,6 @@
                 
             </div>
             <button @click="logout" class="logout px-3 py-1">Logout</button>
-=======
-    <div class="w-100 h-100">
-        <div class="flex">
-            <div class="home_btn">
-                <button @click="backBtn" class="back">&#60;</button>
-            </div>
-            <div class="noti_btn">
-                <img src="/icons/noti-btn.png" alt="">
-                <br>
-                <span>แจ้งเตือน</span>
-            </div>
-        </div>
-        <div class="w-100">
-            <div class="w-90 mx-auto">
-                <img class="profile-img" src="/icons/user_test_img.png" alt="">
-                <br>
-                <span class="flex name w-100 mx-auto mt-4">นายสมชวย เรืองอินทนนทร์</span>
-            </div>
-            <div>
-
-            </div>
->>>>>>> 55aa49677bfb109fe39d391056fc52aa0108b6ec
         </div>
         <Footer></Footer>
     </div>
@@ -59,7 +36,6 @@
 
 <script>
 import Footer from '../../components/Footer.vue'
-<<<<<<< HEAD
 import AuthUser from "@/store/AuthUser"
 export default {
     data(){
@@ -84,17 +60,11 @@ export default {
             })
             this.$router.push("/")
         }
-=======
-export default {
-    components:{
-        Footer,
->>>>>>> 55aa49677bfb109fe39d391056fc52aa0108b6ec
     },
     methods:{
         backBtn(){
             this.$router.go(-1)
         },
-<<<<<<< HEAD
         isAuthen() {
             if(AuthUser.getters.user != null){
                 return AuthUser.getters.isAuthen
@@ -126,15 +96,10 @@ export default {
             });
         }
     }
-=======
-    }
-
->>>>>>> 55aa49677bfb109fe39d391056fc52aa0108b6ec
 }
 </script>
 
 <style lang='scss' scoped>
-<<<<<<< HEAD
 .home_btn{
     margin-right: auto;
     margin: 20px auto 20px 20px;
@@ -218,29 +183,4 @@ export default {
         border-radius: 9px;
     }
 }
-=======
-    .home_btn{
-        margin-right: auto;
-        margin: 20px auto 20px 20px;
-    }
-    .back{
-        border: 0;
-        background-color: #fff;
-        font-size: 2rem;
-    }
-    .noti_btn{
-        margin-left: auto;
-        margin: 20px 20px 20px auto;
-    }
-    .deleted-margin{
-        margin: 0px;
-    }
-    .profile-img{
-        border:20px solid #BCC8D6;
-        border-radius: 100%;
-    }
-    .name{
-        text-align:center;
-    }
->>>>>>> 55aa49677bfb109fe39d391056fc52aa0108b6ec
 </style>
