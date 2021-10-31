@@ -1,32 +1,36 @@
 <template>
     <div class="w-100 h-100">
-        <Header tab="CCs"></Header>
+        <Header tab="CCs" :back=true></Header>
         <div class="content_wrapper w-90 mt-4 mx-auto">
             <div class="header_content w-100">
                 <div class="flex w-100">
-                    <span class="flex my-1 mx-auto">รายชื่อลูกค้าที่ขอประเมิน</span>
+                    <span v-if="this.role === 'Admin'" class="flex my-1 mx-auto">User List</span>
+                    <span v-if="this.role === 'Employee'" class="flex my-1 mx-auto">Customer List</span>
                 </div>
-                <input class="flex search_bar mx-auto" type="text" placeholder="ค้นหาลูกค้า">
+                <input v-model="searchUser" class="flex search_bar mx-auto" type="text" placeholder="Search">
             </div>
             <table class="w-100 h-90">
                 <thead class="w-100 table_head">
                     <tr class="flex my-2 w-100">
-                        <th id="id" class="id">ไอดี</th>
-                        <th id="name" class="name">ชื่อ</th>
-                        <th id="login" class="login">ล็อคอิน</th>
+                        <th id="id" class="id">ID</th>
+                        <th id="name" class="name">Name</th>
+                        <th id="login" class="login">Login</th>
                     </tr>
                 </thead>
                 <div id="table_body" class="flex w-100 mt-2">
                     <tbody class="w-100">
-                        <tr id="row" class="flex py-1">
-                            <td id="id">01</td>
-                            <td id="name">name</td>
-                            <td id="login">00:00 น</td>
+                        <tr v-for="(user, index) in resultQuery" :key="index" class="flex w-100 py-1 row">
+                            <button class="flex w-full" @click="getDetail(user.id)">
+                                <td id="id">{{user.id}}</td>
+                                <td id="name">{{user.name}}</td>
+                                <td id="login">{{user.updated_at}}</td>
+                            </button>
                         </tr>
                     </tbody>
                 </div>
-                
+                <button @click="addBtn" class="mt-2 addBtn px-3 py-1"> Add</button>
             </table>
+            
         </div>
         <Footer></Footer>
     </div>
@@ -35,11 +39,75 @@
 <script>
 import Header from '../../components/Header.vue'
 import Footer from '../../components/Footer.vue'
+import AdminStore from "@/store/Admin"
+import EmployeeStore from "@/store/Employee"
+import AuthUser from "@/store/AuthUser"
 export default {
+    data() {
+        return {
+            searchUser: null,
+            allUsers: [],
+            searchList: [],
+            role: AuthUser.getters.user.role
+        }
+    },
     components:{
         Header,
         Footer
     },
+    mounted(){
+        if (!this.isAuthen()) {
+            Swal.fire({
+                title: "You don't have permission!!",
+                text: 'Please login',
+                icon: 'warning',
+                confirmButtonText: 'Okay'
+            })
+            this.$router.push("/")
+        }
+    },
+    created(){
+        if(this.role === 'Admin'){
+            this.fetchAllUser()
+        }
+        else{
+            this.fetchAllCustomer()
+        }
+    },
+    methods:{
+        async fetchAllUser(){
+            await AdminStore.dispatch('fetchAllUser')
+            this.searchList = AdminStore.getters.users
+            this.allUsers = AdminStore.getters.users
+        },
+        async fetchAllCustomer(){
+            await EmployeeStore.dispatch('getAllCustomers')
+            this.searchList = EmployeeStore.getters.customer
+            this.allUsers = EmployeeStore.getters.customer
+        },
+        async getDetail(userId){
+            this.$router.push('/request/' + userId)
+        },
+        isAuthen() {
+            if(AuthUser.getters.user != null){
+                return AuthUser.getters.isAuthen
+            }
+        },
+        addBtn(){
+            this.$router.push('userForm')
+        },
+    },
+    computed: {
+        resultQuery(){
+            if(this.searchUser){
+                return this.allUsers.filter((item)=>{
+                    return this.searchUser.toLowerCase().split(' ').every(v => item.name.toLowerCase().includes(v))
+                })
+                }else{
+                    return this.allUsers;
+            }
+        }
+    }
 }
 </script>
 
@@ -65,10 +133,18 @@ export default {
         }
         #table_body{
             overflow-y: scroll;
-            height: 95%;
+            height: 90%;
         }
         #row{
             border-bottom: 1px solid #000000;
+        }
+        .row{
+            border-bottom: 1px solid #000000;
+            margin-left: 0px;
+            button{
+                background-color: #C6E5FF;
+                border:0px;
+            }
         }
         #id{
             width: 10%;
@@ -83,6 +159,12 @@ export default {
         .name{
             border-left: 2px solid #000000;
             border-right: 2px solid #000000;
+        }
+        .addBtn{
+            color: #fff;
+            border-radius: 5px;
+            border: 0px;
+            background-color: #0B4870;
         }
     }
 </style>

@@ -1,17 +1,17 @@
 <template>
     <div class="h-100">
-        <div class="w-100 h-10 admin-text">
-            <b-row class="flex text-center h-100 w-100 deleted-margin">
-                <b-col><button @click="backBtn" class="flex back">&#60;</button></b-col>
-                <b-col class="w-100" cols="6"><span class=" admin px-5 py-2 mt-3 ">Admin</span></b-col>
-            </b-row>
+        <div class="home_btn">
+            <button @click="backBtn" class="flex back mx-2">&#60;</button>
+        </div>
+        <div class="flex w-100 admin-text">
+            <span class="admin px-5 mx-auto">Admin</span>
         </div>
         <div class="w-100 h-25 mb-3">
             <img class="background" src="/images/contract-img.png" alt="">
         </div>
         <div class="w-100 h-25">
             <div class="w-75 h-100 mx-auto">
-                <span class="flex mb-3">ติดต่อสอบถาม : </span>
+                <span class="flex mb-3">Contact us : </span>
                 <div class="request-box">
                     <div class="flex top">
                         <img class="square ml-2" src="/icons/square.png" alt="">
@@ -50,24 +50,25 @@
 
 <script>
 export default {
+    
     methods:{
         backBtn(){
             this.$router.go(-1)
         },
-    }
+    },
 }
 </script>
 
 <style lang="scss" scoped>
     .admin-text{
-        height: 15%;
+        height: 10%;
         text-align: center;
         .admin{
             height: 30px;
             background-color: #D4EBFA;
             color: #0B4870;
             font-weight: bold;
-            margin-top: 15%;
+            margin-top: 10%;
             line-height: 200%;
         }
     }

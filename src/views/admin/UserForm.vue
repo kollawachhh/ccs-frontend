@@ -1,6 +1,6 @@
 <template>
   <div class="h-100">
-      <Header tab='Register' :back=true></Header>
+      <Header tab='User Account' :back=true></Header>
       <div class="content">
           <div class="mt-3">
               <img class="logo" src="/icons/ccs-logo.png" alt="">
@@ -9,53 +9,39 @@
               <form @submit.prevent="register" class="mb-3 h-100" action="">
                     <div class="form_wrapper h-100">
                             <div class="mb-4 username_wrapper">
-                                <span>รูปประจำตัว :</span>
+                                <span>Profile image :</span>
                                 <img :src="this.form.image" alt="" class="w-50 h-50 my-2">
                                 <input @change="handleImage" class="first_color w-100" type="file" accept="image/*">
                             </div>
                             <div class="mb-4 username_wrapper">
-                                <span>ชื่อผู้ใช้ :</span>
+                                <span>Username :</span>
                                 <input v-model="form.username" class="second_color w-100" type="text">
                             </div>
                             <div class="mb-4 username_wrapper">
-                                <span>รหัสผ่าน :</span>
+                                <span>Password :</span>
                                 <div class="flex">
-                                    <input v-model="form.password" class="first_color password left" type="password" placeholder="ใส่รหัสผ่าน">
-                                    <input v-model="form.confirmPassword" class="first_color password right" type="password" placeholder="ยืนยันรหัสผ่าน">
+                                    <input v-model="form.password" class="first_color password left" type="password" placeholder="Password ...">
+                                    <input v-model="form.confirmPassword" class="first_color password right" type="password" placeholder="Confirm ...">
                                 </div>
                             </div>
                             <div class="mb-4 username_wrapper">
-                                <span>ชื่อ :</span>
+                                <span>Name :</span>
                                 <input v-model="form.name" class="second_color w-100" type="text">
-                            </div>
-                            <!-- <div class="mb-4 username_wrapper">
-                                <span>วัน/เดือน/ปี เกิด : </span>
-                                <input v-model="form.birthDate" class="first_color w-100" type="date">
-                            </div> -->
-                            <div class="mb-4 username_wrapper">
-                                <span>หมายเลขบัตรประชาชน : </span>
-                                <input v-model="form.idCard" class="second_color w-100" type="text">
-                            </div>
-                            <div class="mb-4 username_wrapper">
-                                <span>เบอร์โทรศัพท์ : </span>
-                                <input v-model="form.tel" class="first_color w-100" type="text">
-                            </div>
-                            <div class="mb-4 username_wrapper">
-                                <span>ที่อยู่ : </span>
-                                <textarea v-model="form.address" class="second_color address w-100" name="" id="" cols="30" rows="3"></textarea>
                             </div>
                         </div>
                   <div >
-                      <button class="mt-3 px-3 py-1 submit_button">ตรวจสอบ</button>
+                      <button class="mt-1 px-3 py-1 submit_button">Submit</button>
                   </div>
               </form>
           </div>
       </div>
+      <Footer></Footer>
   </div>
 </template>
 
 <script>
 import Header from '../../components/Header.vue'
+import Footer from '../../components/Footer.vue'
 import CustomerStore from "@/store/Customer"
 export default {
     data() {
@@ -66,15 +52,16 @@ export default {
                 password: "",
                 confirmPassword: "",
                 name: "",
-                idCard:"",
-                tel:"",
-                address:"",
-                role:"Customer",
+                // idCard:"",
+                // tel:"",
+                // address:"",
+                role:"Employee",
             },
         }
     },
     components:{
-        Header
+        Header,
+        Footer
     },
     methods:{
         handleImage(e){
@@ -122,10 +109,10 @@ export default {
                             username: this.form.username,
                             password: this.form.password,
                             name: this.form.name,
-                            id_card: this.form.idCard,
-                            tel: this.form.tel,
-                            address: this.form.address,
-                            role:"Customer",
+                            // id_card: this.form.idCard,
+                            // tel: this.form.tel,
+                            // address: this.form.address,
+                            role:"Employee",
                         } 
                         CustomerStore.dispatch('createCustomer', newCustomer)
                         Swal.fire({
@@ -134,7 +121,7 @@ export default {
                             showCloseButton: true,
                             confirmButtonText: 'Okay'
                         })
-                        this.$router.push('/')
+                        this.$router.push('/userList')
                     }
                     
                 }
@@ -150,7 +137,7 @@ export default {
                 idCard: this.form.idCard,
                 tel: this.form.tel,
                 address: this.form.address,
-                role:"Customer",
+                role:"Employee",
             }
         }
     }

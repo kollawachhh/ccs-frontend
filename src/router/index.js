@@ -5,10 +5,12 @@ import Register from '../views/auth/Register.vue'
 import Contract from '../views/auth/Contract.vue'
 import AccountDetail from '../views/auth/AccountDetail.vue'
 import Home from '../views/user/Home.vue'
+import RequestDetail from '../views/user/RequestDetail.vue'
 import DocumentForm from '../views/user/DocumentForm.vue'
 import Appointment from '../views/user/Appointment.vue'
 import Appraise from '../views/user/AppraiseStep.vue'
 import UserList from '../views/admin/UserList.vue'
+import UserForm from '../views/admin/UserForm.vue'
 import Request from '../views/user/RequestList.vue'
 
 Vue.use(VueRouter)
@@ -35,12 +37,22 @@ const routes = [
     component: Home
   },
   {
+    path: '/request',
+    name: 'RequestList',
+    component: Request
+  },
+  {
+    path: '/request/:id',
+    name: 'RequestDetail',
+    component: RequestDetail
+  },
+  {
     path: '/docForm',
     name: 'DocumentForm',
     component: DocumentForm
   },
   {
-    path: '/appointment',
+    path: '/appointment/:id',
     name: 'Appointment',
     component: Appointment
   },
@@ -48,6 +60,11 @@ const routes = [
     path: '/userList',
     name: 'UserList',
     component: UserList
+  },
+  {
+    path: '/userForm',
+    name: 'UserForm',
+    component: UserForm
   },
   {
     path: '/appraise',

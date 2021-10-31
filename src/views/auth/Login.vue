@@ -9,16 +9,15 @@
               <img class="logo" src="/icons/ccs-logo.png" alt="">
           </div>
           <div class="my-4">
-              <form @submit.prevent="login" class="mb-3" action="">
+              <form @submit.prevent="login" class="mb-3">
                   <div class="mb-4 username_wrapper">
-                      <span>User id :</span>
-                      <input class="userId w-100" type="text">
+                      <span>Username :</span>
+                      <input v-model="form.username" class="userId w-100" type="text">
                   </div>
                   <div class="mb-4 password_wrapper">
                       <span>Password : </span>
                       <div class="password w-100">
-                          <input class="password w-75" type="password">
-                          <a href="">ลืมรหัส?</a>
+                          <input v-model="form.password" class="password w-100" type="password">
                       </div>
                   </div>
                   <div >
@@ -28,7 +27,7 @@
               <a class="register" href="/register">register</a>
           </div>
           <div class="contract_wrapper">
-              <a class="contract" href="/contract">ติดต่อ admin</a>
+              <a class="contract" href="/contract">Contact us</a>
           </div>
       </div>
   </div>
@@ -36,20 +35,67 @@
 
 <script>
 import Header from '../../components/Header.vue'
+import AuthUser from '../../store/AuthUser'
 export default {
     components:{
         Header
     },
+    data() {
+        return {
+            form: {
+                username: "",
+                password: ""
+            },
+            errors: '',
+        }
+    },
     methods:{
-        login(){
-            this.$router.push('/home')
-            Swal.fire({
-                title: 'Login Complete!',
-                text: 'Welcome User',
-                icon: 'success',
-                confirmButtonText: 'Okay'
-            })
-            console.log('worked!');
+        async login(e) {
+            e.preventDefault()
+            this.errors = ''
+            if (this.form.username == "" || this.form.password == "") {
+              if(this.form.username == "" && this.form.password == ""){
+                this.errors = 'fields required'
+                // this.$swal("กรุณากรอกข้อมูลให้ครบ", "ตรวจสอบให้แน่ใจว่าใส่ข้อมูลครบทุกช่อง", "error")
+              }
+              else if(this.form.username == ""){
+                this.errors = 'email required'
+                // this.$swal("กรุณากรอกอีเมลล์", "ตรวจสอบให้แน่ใจว่าใส่ข้อมูลครบทุกช่อง", "error")
+              }
+              else if(this.form.password == ""){
+                this.errors = 'password required'
+                // this.$swal("กรุณากรอกรหัสผ่าน", "ตรวจสอบให้แน่ใจว่าใส่ข้อมูลครบทุกช่อง", "error")
+              }
+              
+            }
+            else {
+                let res = await AuthUser.dispatch('login', this.form)
+                if (res.success) {
+                    Swal.fire({
+                        title: 'Login Complete!',
+                        text: 'Welcome User',
+                        icon: 'success',
+                        confirmButtonText: 'Okay'
+                    })
+                    this.$router.push('/home')
+                }
+                else {
+                    this.errors = 'email or password invalid.'
+                    Swal.fire({
+                        title: 'Login Incomplete!',
+                        text: 'Please try again.',
+                        icon: 'error',
+                        confirmButtonText: 'Okay'
+                    })
+                    this.clearForm()
+                }
+            }
+        },
+        clearForm() {
+            this.form = {
+                username: "",
+                password: ""
+            }
         }
     },
 }
