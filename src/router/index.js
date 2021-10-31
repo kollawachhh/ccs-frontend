@@ -11,7 +11,11 @@ import DocumentForm from '../views/user/DocumentForm.vue'
 import Appointment from '../views/user/Appointment.vue'
 import Appraise from '../views/user/AppraiseStep.vue'
 import UserList from '../views/admin/UserList.vue'
+<<<<<<< HEAD
 import UserForm from '../views/admin/UserForm.vue'
+=======
+import Request from '../views/user/RequestList.vue'
+>>>>>>> 55aa49677bfb109fe39d391056fc52aa0108b6ec
 
 Vue.use(VueRouter)
 
@@ -75,6 +79,11 @@ const routes = [
     path: '/detail',
     name: 'AccountDetail',
     component: AccountDetail
+  },
+  {
+    path: '/request',
+    name: 'Request',
+    component: Request
   },
 ]
 
