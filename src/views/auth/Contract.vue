@@ -1,5 +1,8 @@
 <template>
     <div class="h-100">
+        <div class="home_btn">
+            <button @click="backBtn" class="flex back mx-2">&#60;</button>
+        </div>
         <div class="flex w-100 admin-text">
             <span class="admin px-5 mx-auto">Admin</span>
         </div>
@@ -8,7 +11,7 @@
         </div>
         <div class="w-100 h-25">
             <div class="w-75 h-100 mx-auto">
-                <span class="flex mb-3">ติดต่อสอบถาม : </span>
+                <span class="flex mb-3">Contact us : </span>
                 <div class="request-box">
                     <div class="flex top">
                         <img class="square ml-2" src="/icons/square.png" alt="">
@@ -47,22 +50,32 @@
 
 <script>
 export default {
-
+    
+    methods:{
+        backBtn(){
+            this.$router.go(-1)
+        },
+    },
 }
 </script>
 
 <style lang="scss" scoped>
     .admin-text{
-        height: 15%;
+        height: 10%;
         text-align: center;
         .admin{
             height: 30px;
             background-color: #D4EBFA;
             color: #0B4870;
             font-weight: bold;
-            margin-top: 15%;
+            margin-top: 10%;
             line-height: 200%;
         }
+    }
+    .back{
+        border: 0;
+        background-color: #fff;
+        font-size: 2rem;
     }
     .background{
         width: 60%;

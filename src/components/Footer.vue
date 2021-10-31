@@ -8,16 +8,40 @@
                 <img src="/icons/middle-btn.png" class="w" alt="">
             </b-col>
             <b-col class="h-100">
-                <img @click="accountDetailBtn" src="/icons/user_test_img.png" class="profile w-50 my-2" alt="">
+                <img @click="accountDetailBtn" :src="user.image" class="profile" alt="">
             </b-col>
         </b-row>
     </div>
 </template>
 
 <script>
+import AuthUser from "@/store/AuthUser"
 export default {
     props:['tab'],
+    data(){
+        return {
+            user: {
+                image: AuthUser.getters.user.image,
+            },
+        }
+    },
+    mounted(){
+        if (!this.isAuthen()) {
+            Swal.fire({
+                title: "You don't have permission!!",
+                text: 'Please login',
+                icon: 'warning',
+                confirmButtonText: 'Okay'
+            })
+            this.$router.push("/")
+        }
+    },
     methods:{
+        isAuthen() {
+            if(AuthUser.getters.user != null){
+                return AuthUser.getters.isAuthen
+            }
+        },
         homeBtn(){
             this.$router.push('/home')
         },
@@ -45,6 +69,9 @@ export default {
         width: 30%;
     }
     .profile{
+        width: 40px;
+        height: 40px;
+        margin-top: 6px;
         background-color: #fff;
         border-radius: 100%;
     }

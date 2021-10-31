@@ -1,41 +1,69 @@
 <template>
   <div class="h-100">
-      <div class="flex">
-              <div class="home_btn">
-                <button @click="backBtn" class="back">&#60;</button>
+      <div class="flex w-100">
+              <div class="noti_btn w-25">
+                  <img src="/icons/ccs-logo.png" class="w-75" alt="">
               </div>
-              <div class="noti_btn">
-                  <img src="/icons/noti-btn.png" alt="">
-                  <br>
-                  <span>แจ้งเตือน</span>
-              </div>
-          </div>
+        </div>
       <div class="content">
         <b-row class="flex text-center w-100 mb-5 deleted-margin">
             <b-col class="h-100">
-                <div class="mb-3">
-                    <span class="flex">ยินดีต้อนรับ</span>
-                    <span class="flex">เข้าสู่ระบบ</span>
+                <div class="mx-3 my-4">
+                    <img :src="user.image" class="profile" alt="">
                 </div>
-                
             </b-col>
-            <b-col cols="4"><img src="/images/user-test-img.png" class="profile" alt=""></b-col>
-            <b-col class="h-100"><span class="flex">ไอ สมโชค</span></b-col>
+            <b-col cols="7" class="h-100 px-0">
+                <span class="flex mt-4 font-bold">Welcome</span>
+                <span class="flex mt-1 username">{{user.name}}</span>
+                <span class="flex mt-1 username">({{user.role}})</span>
+            </b-col>
         </b-row>
-        <b-row class="flex text-center h-25 w-100 deleted-margin">
+        <b-row v-if="user.role === 'Customer'" class="flex text-center h-25 w-100 deleted-margin">
             <b-col class="h-full">
-                <button @click="documentBtn" class="button yellow w-75 py-2 my-2">
+                <button @click="requsetListBtn" class="button yellow w-75 py-2 my-2">
                     <img class="w-75 h-75" src="/icons/doc-btn.png" alt="">
                 </button>
                 <br>
-                <span>รายการคำขอทั้งหมด</span>
+                <span>Request List</span>
             </b-col>
             <b-col class="h-100">
                 <button @click="requestBtn" class="button old-green w-75 py-2 my-2">
                     <img class="w-75 h-75" src="/icons/doc-btn.png" alt="">
                 </button>
                 <br>
-                <span>ส่งคำขอประเมิน</span>
+                <span>Request</span>
+            </b-col>
+        </b-row>
+        <b-row v-if="user.role === 'Employee'" class="flex text-center h-25 w-100 deleted-margin">
+            <b-col class="h-full">
+                <button @click="customerList" class="button yellow w-75 py-2 my-2">
+                    <img class="w-75 h-75" src="/icons/doc-btn.png" alt="">
+                </button>
+                <br>
+                <span>Customer List</span>
+            </b-col>
+            <b-col class="h-100">
+                <button @click="requsetListBtn" class="button old-green w-75 py-2 my-2">
+                    <img class="w-75 h-75" src="/icons/doc-btn.png" alt="">
+                </button>
+                <br>
+                <span>Request List</span>
+            </b-col>
+        </b-row>
+        <b-row v-if="user.role === 'Admin'" class="flex text-center h-25 w-100 deleted-margin">
+            <b-col class="h-full">
+                <button @click="userListBtn" class="button yellow w-75 py-2 my-2">
+                    <img class="w-75 h-75" src="/icons/doc-btn.png" alt="">
+                </button>
+                <br>
+                <span>User List</span>
+            </b-col>
+            <b-col class="h-100">
+                <button @click="userListBtn" class="button old-green w-75 py-2 my-2">
+                    <img class="w-75 h-75" src="/icons/doc-btn.png" alt="">
+                </button>
+                <br>
+                <span>Request List</span>
             </b-col>
         </b-row>
       </div>
@@ -45,27 +73,37 @@
 
 <script>
 import Footer from '../../components/Footer.vue'
+import AuthUser from "@/store/AuthUser"
 export default {
-    data() {
+    data(){
         return {
-            form: {
-                image: "",
-                username: "",
-                password: "",
-                confirmPassword: "",
-                firstname: "",
-                surname:"",
-                date: "",
-                idCard:"",
-                tel:"",
-                address:"",
-            },
+            user: {
+                name: AuthUser.getters.user.name,
+                image: AuthUser.getters.user.image,
+                role: AuthUser.getters.user.role,
+            }
         }
     },
     components:{
         Footer
     },
+    mounted(){
+        if (!this.isAuthen()) {
+            Swal.fire({
+                title: "You don't have permission!!",
+                text: 'Please login',
+                icon: 'warning',
+                confirmButtonText: 'Okay'
+            })
+            this.$router.push("/")
+        }
+    },
     methods:{
+        isAuthen() {
+            if(AuthUser.getters.user != null){
+                return AuthUser.getters.isAuthen
+            }
+        },
         handleImage(e){
             const selectedImage = e.target.files[0]
             const reader = new FileReader()
@@ -78,12 +116,18 @@ export default {
         backBtn(){
             this.$router.go(-1)
         },
-        documentBtn(){
-            this.$router.push('/docForm')
+        requsetListBtn(){
+            this.$router.push('/request')
         },
         requestBtn(){
             this.$router.push('/appraise')
-        }
+        },
+        userListBtn(){
+            this.$router.push('/userList')
+        },
+        customerList(){
+            this.$router.push('/userList')
+        },
     }
 }
 </script>
@@ -100,7 +144,6 @@ export default {
 }
 .noti_btn{
     margin-left: auto;
-    margin: 20px 20px 20px auto;
 }
 .content{
     height: 85%;
@@ -113,7 +156,7 @@ export default {
         height: 80px;
         border: 5px solid #BCC8D6;
         border-radius: 100%;
-        background-color: #BCC8D6;
+        background-color: #fff;
     }
     .topic{
         background-color: #EDEDED;
@@ -144,6 +187,9 @@ export default {
             color: black;
         }
     }
+}
+.username{
+    
 }
 .deleted-margin{
     margin: 0px;

@@ -11,48 +11,73 @@
     </div>
     <div class="w-100 h-75">
         <form @submit.prevent="submit" class="w-100 h-100" action="">
-            <div class="form-wrapper mt-5 w-100 h-100">
+            <div class="w-75 mx-auto mt-4">
+                <span class="flex font-bold">Building Type</span>
+                <select class="flex mt-2 px-2 choices w-100" v-model="form.type">
+                    <option value="" disabled selected hidden>Select building type</option>
+                    <option 
+                        v-for="(type, index) in types" 
+                        :key="index"
+                        :value="type.name">{{type.name}}</option>
+                </select>
+            </div>
+            
+            <div class="form-wrapper mt-4 w-100 h-90">
+                <div v-if="this.form.type === 'Developed housing'" class="w-75 mx-auto">
+                    <span class="flex font-bold">ชื่อโครงการ</span>
+                    <input v-model="form.project_name" class="flex w-100 px-2 choices" type="text">
+                </div>
+                <div class="w-75 mx-auto my-3">
+                    <span class="flex font-bold">แนบรูปเอกสารที่เกี่ยวข้อง</span>
+                </div>
+                
                 <div class="w-75 mx-auto my-3">
                     <span class="flex font-bold text-left">1.ใบปะหน้าที่ขอประเมิน</span>
                     <div>
-                        <img class="flex w-25" src="/icons/add-file-btn.png" alt="">
-                        <input class="flex" type="file">
+                        <img class="flex w-25" :src="this.form.cover_sheet" alt="">
+                        <input @change="handleCoverSheetImage" class="flex mt-2" type="file">
                     </div>
-                    
                 </div>
                 <div class="w-75 mx-auto my-3">
                     <span class="flex font-bold text-left">2.ใบเสร็จค่าธรรมเนียมการประเมิน</span>
                     <div>
-                        <img class="flex w-25" src="/icons/add-file-btn.png" alt="">
-                        <input class="flex" type="file">
+                        <img class="flex w-25" :src="this.form.fee_receipt" alt="">
+                        <input @change="handleFeeReceiptImage" class="flex mt-2" type="file">
                     </div>
                 </div>
                 <div class="w-75 mx-auto my-3">
                     <span class="flex font-bold text-left">3.สัญญาซื้อขาย</span>
                     <div>
-                        <img class="flex w-25" src="/icons/add-file-btn.png" alt="">
-                        <input class="flex" type="file">
+                        <img class="flex w-25" :src="this.form.contract" alt="">
+                        <input @change="handleContractImage" class="flex mt-2" type="file">
                     </div>
                 </div>
                 <div class="w-75 mx-auto my-3">
                     <span class="flex font-bold text-left">4.ใบอนุญาติปลูกสร้าง หรือ เอกสารแสดงกรรมสิทธิ์สิ่งปลูกสร้าง</span>
                     <div>
-                        <img class="flex w-25" src="/icons/add-file-btn.png" alt="">
-                        <input class="flex" type="file">
+                        <img class="flex w-25" :src="this.form.construction_permit" alt="">
+                        <input @change="handleConstructionPermitImage" class="flex mt-2" type="file">
                     </div>
                 </div>
                 <div class="w-75 mx-auto my-3">
                     <span class="flex font-bold text-left">5.โฉนดที่ดิน + สารบัญจดทะเบียน</span>
                     <div>
-                        <img class="flex w-25" src="/icons/add-file-btn.png" alt="">
-                        <input class="flex" type="file">
+                        <img class="flex w-25" :src="this.form.title_deed" alt="">
+                        <input @change="handleTitleDeedImage" class="flex mt-2" type="file">
                     </div>
                 </div>
                 <div class="w-75 mx-auto my-3">
                     <span class="flex font-bold text-left">6.แผนที่สังเขป</span>
                     <div>
-                        <img class="flex w-25" src="/icons/location-btn.png" alt="">
-
+                        <img class="flex w-25" :src="this.form.map" alt="">
+                        <input @change="handleMapImage" class="flex mt-2" type="file">
+                    </div>
+                </div>
+                <div v-if="this.form.type === 'Waste land'" class="w-75 mx-auto my-3">
+                    <span class="flex font-bold text-left">7.แบบแปลน</span>
+                    <div>
+                        <img class="flex w-25" :src="this.form.plan" alt="">
+                        <input @change="handlePlanImage" class="flex mt-2" type="file">
                     </div>
                 </div>
             </div>
@@ -66,11 +91,52 @@
 
 <script>
 import Footer from '../../components/Footer.vue'
+import AuthUser from "@/store/AuthUser"
+import CustomerStore from "@/store/Customer"
 export default {
+    data() {
+        return {
+            form: {
+                type:'',
+                project_name:'',
+                cover_sheet: "/icons/add-file-btn.png",
+                fee_receipt: "/icons/add-file-btn.png",
+                contract: "/icons/add-file-btn.png",
+                construction_permit: "/icons/add-file-btn.png",
+                title_deed: "/icons/add-file-btn.png",
+                map: "/icons/location-btn.png",
+                plan:'icons/add-file-btn.png',
+                status: "Waiting approve"
+            },
+            types:[
+                {name: 'Detached house'},
+                {name: 'Townhouse'},
+                {name: 'Condo'},
+                {name: 'Waste land'},
+                {name: 'Developed housing'},
+            ],
+        }
+    },
     components:{
         Footer
     },
+    mounted(){
+        if (!this.isAuthen()) {
+            Swal.fire({
+                title: "You don't have permission!!",
+                text: 'Please login',
+                icon: 'warning',
+                confirmButtonText: 'Okay'
+            })
+            this.$router.push("/")
+        }
+    },
     methods:{
+        isAuthen() {
+            if(AuthUser.getters.user != null){
+                return AuthUser.getters.isAuthen
+            }
+        },
         submit(){
             Swal.fire({
                 title: 'Are you sure?',
@@ -82,13 +148,107 @@ export default {
                 confirmButtonText: 'Submit'
             }).then((result) => {
             if (result.isConfirmed) {
-                Swal.fire(
-                'Complete!',
-                'Your documents has been submit.',
-                'success'
-                )
+                if(this.form.cover_sheet !== "/icons/add-file-btn.png" &&
+                   this.form.fee_receipt !== "/icons/add-file-btn.png" &&
+                   this.form.contract !== "/icons/add-file-btn.png" &&
+                   this.construction_permit !== "/icons/add-file-btn.png" &&
+                   this.title_deed !== "/icons/add-file-btn.png" &&
+                   this.map !== "/icons/location-btn.png"){
+                    let newRequest = {
+                        type: this.form.type,
+                        project_name: this.form.project_name,
+                        cover_sheet: this.form.cover_sheet,
+                        fee_receipt: this.form.fee_receipt,
+                        contract: this.form.contract,
+                        construction_permit: this.form.construction_permit,
+                        title_deed: this.form.title_deed,
+                        map: this.form.map,
+                        plan: this.form.plan,
+                        status: "Waiting approve",
+                    }
+                    this.pushData(newRequest)
+                    Swal.fire(
+                        'Complete!',
+                        'Your documents has been submit.',
+                        'success'
+                    )
+                    this.$router.push('/appraise')
+                }
+                else{
+                    Swal.fire(
+                        'InComplete!',
+                        'Please try again.',
+                        'error'
+                    )
+                }
             }
             })
+        },
+        async pushData(newRequest){
+            await CustomerStore.dispatch('createRequest', newRequest)
+        },
+        handleCoverSheetImage(e){
+            const selectedImage = e.target.files[0]
+            const reader = new FileReader()
+
+            reader.onloadend = () => {
+                this.form.cover_sheet = reader.result;
+            }
+            reader.readAsDataURL(selectedImage)
+        },
+        handleFeeReceiptImage(e){
+            const selectedImage = e.target.files[0]
+            const reader = new FileReader()
+
+            reader.onloadend = () => {
+                this.form.fee_receipt = reader.result;
+            }
+            reader.readAsDataURL(selectedImage)
+        },
+        handleContractImage(e){
+            const selectedImage = e.target.files[0]
+            const reader = new FileReader()
+
+            reader.onloadend = () => {
+                this.form.contract = reader.result;
+            }
+            reader.readAsDataURL(selectedImage)
+        },
+        handleConstructionPermitImage(e){
+            const selectedImage = e.target.files[0]
+            const reader = new FileReader()
+
+            reader.onloadend = () => {
+                this.form.construction_permit = reader.result;
+            }
+            reader.readAsDataURL(selectedImage)
+        },
+        handleTitleDeedImage(e){
+            const selectedImage = e.target.files[0]
+            const reader = new FileReader()
+
+            reader.onloadend = () => {
+                this.form.title_deed = reader.result;
+            }
+            reader.readAsDataURL(selectedImage)
+        },
+        handleMapImage(e){
+            const selectedImage = e.target.files[0]
+            const reader = new FileReader()
+
+            reader.onloadend = () => {
+                this.form.map = reader.result;
+            }
+            reader.readAsDataURL(selectedImage)
+        },
+        handlePlanImage(e){
+            const selectedImage = e.target.files[0]
+            const reader = new FileReader()
+
+            reader.onloadend = () => {
+                this.form.plan = reader.result;
+            }
+            reader.readAsDataURL(selectedImage)
         },
         backBtn(){
             this.$router.go(-1)
@@ -120,7 +280,10 @@ export default {
 .form-wrapper{
     overflow-x: scroll;
 }
-
+.choices{
+    border-radius: 10px;
+    height: 30px;
+}
 .text-left{
     text-align: left;
 }
