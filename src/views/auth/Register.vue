@@ -68,7 +68,7 @@
                                 <div v-bind:class="{'field-required': this.errors === 'idCard required' || this.errors === 'fields required'}">
                                     <input 
                                         v-model="form.idCard" 
-                                        class="second_color w-100" 
+                                        class="first_color w-100" 
                                         type="text">
                                 </div>
                             </div>
@@ -77,16 +77,16 @@
                                 <div v-bind:class="{'field-required': this.errors === 'tel required' || this.errors === 'fields required'}">
                                     <input 
                                         v-model="form.tel" 
-                                        class="first_color w-100" 
+                                        class="second_color w-100" 
                                         type="text">
                                 </div>
                             </div>
                             <div class="mb-4 username_wrapper">
                                 <span class="font-bold">ที่อยู่</span>
-                                <div class="second_color" v-bind:class="{'field-required': this.errors === 'address required' || this.errors === 'fields required'}">
+                                <div class="first_color" v-bind:class="{'field-required': this.errors === 'address required' || this.errors === 'fields required'}">
                                     <textarea 
                                         v-model="form.address" 
-                                        class="second_color address w-100 h-100" 
+                                        class="first_color address w-100 h-100" 
                                         cols="30" 
                                         rows="3"
                                         >
@@ -354,7 +354,7 @@ export default {
             border-radius: 5px;
         }
         .submit_button{
-            background-color: #F3D158;
+            background-color: #FFC839;
             border:0;
             box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.25);
             border-radius: 5px;
