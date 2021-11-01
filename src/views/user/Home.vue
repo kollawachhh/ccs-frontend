@@ -13,9 +13,9 @@
                 </div>
             </b-col>
             <b-col cols="7" class="h-100 px-0">
-                <span class="flex mt-4 font-bold">Welcome</span>
+                <span class="flex mt-4 font-bold">ยินดีต้อนรับ</span>
                 <span class="flex mt-1 username">{{user.name}}</span>
-                <span class="flex mt-1 username">({{user.role}})</span>
+                <span class="flex mt-1 username">({{formatRoleTH(user.role)}})</span>
             </b-col>
         </b-row>
         <b-row v-if="user.role === 'Customer'" class="flex text-center h-25 w-100 deleted-margin">
@@ -24,14 +24,14 @@
                     <img class="w-75 h-75" src="/icons/doc-btn.png" alt="">
                 </button>
                 <br>
-                <span>Request List</span>
+                <span>รายการคำขอประเมิน</span>
             </b-col>
             <b-col class="h-100">
                 <button @click="requestBtn" class="button old-green w-75 py-2 my-2">
                     <img class="w-75 h-75" src="/icons/doc-btn.png" alt="">
                 </button>
                 <br>
-                <span>Request</span>
+                <span>ขั้นตอนส่งคำขอประเมิน</span>
             </b-col>
         </b-row>
         <b-row v-if="user.role === 'Employee'" class="flex text-center h-25 w-100 deleted-margin">
@@ -40,14 +40,14 @@
                     <img class="w-75 h-75" src="/icons/doc-btn.png" alt="">
                 </button>
                 <br>
-                <span>Customer List</span>
+                <span>รายชื่อลูกค้าในระบบ</span>
             </b-col>
             <b-col class="h-100">
                 <button @click="requsetListBtn" class="button old-green w-75 py-2 my-2">
                     <img class="w-75 h-75" src="/icons/doc-btn.png" alt="">
                 </button>
                 <br>
-                <span>Request List</span>
+                <span>รายการคำขอประเมินของลูกค้า</span>
             </b-col>
         </b-row>
         <b-row v-if="user.role === 'Admin'" class="flex text-center h-25 w-100 deleted-margin">
@@ -56,14 +56,14 @@
                     <img class="w-75 h-75" src="/icons/doc-btn.png" alt="">
                 </button>
                 <br>
-                <span>User List</span>
+                <span>รายชื่อผู้ใช้งานในระบบ</span>
             </b-col>
             <b-col class="h-100">
-                <button @click="userListBtn" class="button old-green w-75 py-2 my-2">
+                <button class="button old-green w-75 py-2 my-2">
                     <img class="w-75 h-75" src="/icons/doc-btn.png" alt="">
                 </button>
                 <br>
-                <span>Request List</span>
+                <span>อันนี้ไม่รู้เอาไรดี</span>
             </b-col>
         </b-row>
       </div>
@@ -74,6 +74,7 @@
 <script>
 import Footer from '../../components/Footer.vue'
 import AuthUser from "@/store/AuthUser"
+import FormatThai from '@/services/FormatThai'
 export default {
     data(){
         return {
@@ -90,10 +91,10 @@ export default {
     mounted(){
         if (!this.isAuthen()) {
             Swal.fire({
-                title: "You don't have permission!!",
-                text: 'Please login',
+                title: "คุณไม่มีสิทธิ์เข้าถึงหน้านี้!!",
+                text: 'กรุณาลงชื่อเข้าใช้ระบบก่อน',
                 icon: 'warning',
-                confirmButtonText: 'Okay'
+                confirmButtonText: 'ตกลง'
             })
             this.$router.push("/")
         }
@@ -128,6 +129,9 @@ export default {
         customerList(){
             this.$router.push('/userList')
         },
+        formatRoleTH(role){
+            return FormatThai.formatRoleTH(role)
+        }
     }
 }
 </script>
@@ -187,9 +191,6 @@ export default {
             color: black;
         }
     }
-}
-.username{
-    
 }
 .deleted-margin{
     margin: 0px;

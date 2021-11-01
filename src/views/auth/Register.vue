@@ -1,6 +1,6 @@
 <template>
   <div class="h-100">
-      <Header tab='Register' :back=true></Header>
+      <Header tab='ลงทะเบียน' :back=true path='/'></Header>
       <div class="content">
           <div class="mt-3">
               <img class="logo" src="/icons/ccs-logo.png" alt="">
@@ -9,44 +9,40 @@
               <form @submit.prevent="register" class="mb-3 h-100" action="">
                     <div class="form_wrapper h-100">
                             <div class="mb-4 username_wrapper">
-                                <span>รูปประจำตัว :</span>
-                                <img :src="this.form.image" alt="" class="w-50 h-50 my-2">
+                                <span>รูปประจำตัว</span>
+                                <img :src="this.form.image" alt="" class="w-50 my-2">
                                 <input @change="handleImage" class="first_color w-100" type="file" accept="image/*">
                             </div>
                             <div class="mb-4 username_wrapper">
-                                <span>ชื่อผู้ใช้ :</span>
+                                <span>ชื่อผู้ใช้</span>
                                 <input v-model="form.username" class="second_color w-100" type="text">
                             </div>
                             <div class="mb-4 username_wrapper">
-                                <span>รหัสผ่าน :</span>
+                                <span>รหัสผ่าน</span>
                                 <div class="flex">
                                     <input v-model="form.password" class="first_color password left" type="password" placeholder="ใส่รหัสผ่าน">
                                     <input v-model="form.confirmPassword" class="first_color password right" type="password" placeholder="ยืนยันรหัสผ่าน">
                                 </div>
                             </div>
                             <div class="mb-4 username_wrapper">
-                                <span>ชื่อ :</span>
+                                <span>ชื่อ</span>
                                 <input v-model="form.name" class="second_color w-100" type="text">
                             </div>
-                            <!-- <div class="mb-4 username_wrapper">
-                                <span>วัน/เดือน/ปี เกิด : </span>
-                                <input v-model="form.birthDate" class="first_color w-100" type="date">
-                            </div> -->
                             <div class="mb-4 username_wrapper">
-                                <span>หมายเลขบัตรประชาชน : </span>
+                                <span>หมายเลขบัตรประชาชน</span>
                                 <input v-model="form.idCard" class="second_color w-100" type="text">
                             </div>
                             <div class="mb-4 username_wrapper">
-                                <span>เบอร์โทรศัพท์ : </span>
+                                <span>เบอร์โทรศัพท์</span>
                                 <input v-model="form.tel" class="first_color w-100" type="text">
                             </div>
                             <div class="mb-4 username_wrapper">
-                                <span>ที่อยู่ : </span>
+                                <span>ที่อยู่</span>
                                 <textarea v-model="form.address" class="second_color address w-100" name="" id="" cols="30" rows="3"></textarea>
                             </div>
                         </div>
                   <div >
-                      <button class="mt-3 px-3 py-1 submit_button">ตรวจสอบ</button>
+                      <button class="mt-3 px-3 py-1 submit_button">ยืนยัน</button>
                   </div>
               </form>
           </div>
@@ -61,7 +57,7 @@ export default {
     data() {
         return {
             form: {
-                image: "",
+                image: "/images/user-test-img.png",
                 username: "",
                 password: "",
                 confirmPassword: "",
@@ -88,15 +84,15 @@ export default {
         },
         register(){
             Swal.fire({
-                title: 'Register',
-                text: 'Are you sure?',
-                icon: 'warning',
+                title: 'ลงทะเบียน',
+                text: 'คุณต้องการลงทะเบียนใช่หรือไม่?',
+                icon: 'question',
                 showCancelButton: true,
                 showCloseButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes',
-                cancelButtonText: 'No',
+                confirmButtonText: 'ใช่',
+                cancelButtonText: 'ไม่',
             })
             .then((r) => {
                 if(r.value){
@@ -110,10 +106,10 @@ export default {
                        this.form.address === ""){
                             this.clearForm()
                             Swal.fire({
-                                title: 'Register Incomplete!',
+                                title: 'ลงทะเบียนไม่สำเร็จ!',
                                 icon: 'error',
                                 showCloseButton: true,
-                                confirmButtonText: 'Okay'
+                                confirmButtonText: 'ตกลง'
                             })
                        }
                     else{
@@ -129,10 +125,10 @@ export default {
                         } 
                         CustomerStore.dispatch('createCustomer', newCustomer)
                         Swal.fire({
-                            title: 'Register Complete!',
+                            title: 'ลงทะเบียนสำเร็จ!',
                             icon: 'success',
                             showCloseButton: true,
-                            confirmButtonText: 'Okay'
+                            confirmButtonText: 'ตกลง'
                         })
                         this.$router.push('/')
                     }

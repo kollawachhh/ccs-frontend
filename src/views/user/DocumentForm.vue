@@ -12,13 +12,13 @@
     <div class="w-100 h-75">
         <form @submit.prevent="submit" class="w-100 h-100" action="">
             <div class="w-75 mx-auto mt-4">
-                <span class="flex font-bold">Building Type</span>
+                <span class="flex font-bold">ประเภท</span>
                 <select class="flex mt-2 px-2 choices w-100" v-model="form.type">
-                    <option value="" disabled selected hidden>Select building type</option>
+                    <option value="" disabled selected hidden>เลือกประเภท</option>
                     <option 
                         v-for="(type, index) in types" 
                         :key="index"
-                        :value="type.name">{{type.name}}</option>
+                        :value="type.name">{{formatTypeTH(type.name)}}</option>
                 </select>
             </div>
             
@@ -81,7 +81,7 @@
                     </div>
                 </div>
             </div>
-            <button class="submit-btn" type="submit">SUBMIT</button>
+            <button class="submit-btn" type="submit">ยืนยัน</button>
         </form>
     </div>
     <Footer></Footer>
@@ -93,6 +93,7 @@
 import Footer from '../../components/Footer.vue'
 import AuthUser from "@/store/AuthUser"
 import CustomerStore from "@/store/Customer"
+import FormatThai from '@/services/FormatThai'
 export default {
     data() {
         return {
@@ -104,7 +105,7 @@ export default {
                 contract: "/icons/add-file-btn.png",
                 construction_permit: "/icons/add-file-btn.png",
                 title_deed: "/icons/add-file-btn.png",
-                map: "/icons/location-btn.png",
+                map: "/icons/add-file-btn.png",
                 plan:'icons/add-file-btn.png',
                 status: "Waiting approve"
             },
@@ -123,10 +124,10 @@ export default {
     mounted(){
         if (!this.isAuthen()) {
             Swal.fire({
-                title: "You don't have permission!!",
-                text: 'Please login',
+                title: "คุณไม่มีสิทธิ์เข้าถึงหน้านี้!!",
+                text: 'กรุณาลงชื่อเข้าใช้ระบบก่อน',
                 icon: 'warning',
-                confirmButtonText: 'Okay'
+                confirmButtonText: 'ตกลง'
             })
             this.$router.push("/")
         }
@@ -139,13 +140,14 @@ export default {
         },
         submit(){
             Swal.fire({
-                title: 'Are you sure?',
-                text: "Your documents will be saved!",
+                title: 'บันทึกเอกสาร?',
+                text: "คุณต้องการบันทึกเอกสารใช่หรือไม่!",
                 icon: 'question',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Submit'
+                confirmButtonText: 'ใช่',
+                cancelButtonText: 'ไม่',
             }).then((result) => {
             if (result.isConfirmed) {
                 if(this.form.cover_sheet !== "/icons/add-file-btn.png" &&
@@ -153,7 +155,7 @@ export default {
                    this.form.contract !== "/icons/add-file-btn.png" &&
                    this.construction_permit !== "/icons/add-file-btn.png" &&
                    this.title_deed !== "/icons/add-file-btn.png" &&
-                   this.map !== "/icons/location-btn.png"){
+                   this.map !== "/icons/add-file-btn.png"){
                     let newRequest = {
                         type: this.form.type,
                         project_name: this.form.project_name,
@@ -168,16 +170,15 @@ export default {
                     }
                     this.pushData(newRequest)
                     Swal.fire(
-                        'Complete!',
-                        'Your documents has been submit.',
+                        'บันทึกเอกสารที่เกี่ยวข้องเรียบร้อย',
                         'success'
                     )
                     this.$router.push('/request')
                 }
                 else{
                     Swal.fire(
-                        'InComplete!',
-                        'Please try again.',
+                        'บันทึกเอกสารไม่สำเร็จ!',
+                        'กรุณาลองใหม่อีกครั้ง.',
                         'error'
                     )
                 }
@@ -253,6 +254,9 @@ export default {
         backBtn(){
             this.$router.go(-1)
         },
+        formatTypeTH(type){
+            return FormatThai.formatTypeTH(type)
+        },
     }
 }
 </script>
@@ -291,7 +295,7 @@ export default {
     position: absolute;
     color:#fff;
     bottom: 110px;
-    right: 20px;
+    right: 30px;
     padding: 10px 20px;
     background-color: #0B4870;
     border: 0px;

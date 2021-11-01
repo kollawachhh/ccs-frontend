@@ -12,11 +12,12 @@
     <div class="w-90 h-75 pt-4 content-wrapper mx-auto mt-3">
         <div class="w-75 top">
             <div class="w-90 pt-3">
-                <span class="flex text-left mb-3 mx-2">Type : {{this.request.type}}</span>
-                <span v-if="this.request.type === 'Developed housing'" class="flex text-left mb-3 mx-2">Project name : {{this.request.project_name}}</span>
-                <span class="flex text-left mb-3 mx-2">Appointment : {{this.request.appointment}}</span>
-                <span class="flex text-left mb-3 mx-2">Created : {{this.request.created_at}}</span>
-                <span class="flex text-left mx-2">Status : {{this.request.status}}</span>
+                <span class="flex text-left mb-3 mx-2">ประเภท : {{formatTypeTH(this.request.type)}}</span>
+                <span class="flex text-left mb-3 mx-2">สถานะ : {{formatStatusTH(this.request.status)}}</span>
+                <span v-if="this.request.type === 'Developed housing'" class="flex text-left mb-3 mx-2">ชื่อโครงการ : {{this.request.project_name}}</span>
+                <span class="flex text-left mb-3 mx-2">นัดหมายวันประเมิน : {{formatCreatedAtTH(this.request.appointment)}}</span>
+                <span class="flex text-left mb-3 mx-2">สร้างเมื่อ : {{formatCreatedAtTH(this.request.created_at)}}</span>
+                <span class="flex text-left mx-2">มูลค่าทรัพย์สิน : {{this.value}} บาท</span>
             </div>
         </div>
         <div class="w-75 pt-2 mt-4 bottom">
@@ -75,14 +76,28 @@
     </button>
     <div v-if="this.role === 'Employee'" class="flex">
         <button
+            v-if="this.request.status === 'Waiting approve'"
             @click="confirmBtn"
             class="stepBtn mx-auto mt-3">
             Confirm
         </button>
         <button
+            v-if="this.request.status === 'Waiting approve'"
             @click="rejectBtn"
             class="rejectBtn mx-auto mt-3">
             Reject
+        </button>
+        <button
+            v-if="this.request.status === 'Explore required'"
+            @click="exploreBtn"
+            class="stepBtn mx-auto mt-3">
+            Exploring
+        </button>
+        <button
+            v-if="this.request.status === 'Exploring'"
+            @click="appraiseBtn"
+            class="stepBtn mx-auto mt-3">
+            ประเมิณมูลค่าทรัพย์สิน
         </button>
     </div>
     
@@ -96,27 +111,30 @@ import Footer from '../../components/Footer.vue'
 import AuthUser from "@/store/AuthUser"
 import CustomerStore from "@/store/Customer"
 import EmployeeStore from "@/store/Employee"
+import moment from 'moment'
+import FormatThai from '@/services/FormatThai'
 export default {
     data() {
         return {
             request:[],
             request_id: this.$route.params.id,
             role: AuthUser.getters.user.role,
+            value: 0,
         }
     },
     components:{
         Footer
     },
     created(){
-        this.fetchAllRequest()
+        this.fetchRequestById()
     },
     mounted(){
         if (!this.isAuthen()) {
             Swal.fire({
-                title: "You don't have permission!!",
-                text: 'Please login',
+                title: "คุณไม่มีสิทธิ์เข้าถึงหน้านี้!!",
+                text: 'กรุณาลงชื่อเข้าใช้ระบบก่อน',
                 icon: 'warning',
-                confirmButtonText: 'Okay'
+                confirmButtonText: 'ตกลง'
             })
             this.$router.push("/")
         }
@@ -127,12 +145,18 @@ export default {
                 return AuthUser.getters.isAuthen
             }
         },
-        async fetchAllRequest(){
+        async fetchRequestById(){
             await CustomerStore.dispatch('getRequestDetailById', this.request_id)
             this.request = CustomerStore.getters.customer
+            if(this.request.value){
+               this.value = this.request.value 
+            }
+            if(this.request.status === 'Exploring' && role === 'Employee'){
+                this.appraiseBtn()
+            }
         },
         backBtn(){
-            this.$router.go(-1)
+            this.$router.push('/request')
         },
         appointBtn(){
             this.$router.push('/appointment/' + this.request_id)
@@ -187,11 +211,93 @@ export default {
                 }
             });
         },
+        exploreBtn(){
+            Swal.fire({
+                title: 'Exploring',
+                text: 'Are you sure?',
+                icon: 'warning',
+                showCancelButton: true,
+                showCloseButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'No',
+            })
+            .then((r) => {
+                if(r.value){
+                    this.actionBtn('exploring')
+                    Swal.fire({
+                        title: 'Exploring Confirmed!',
+                        icon: 'success',
+                        showCloseButton: true,
+                        confirmButtonText: 'Okay'
+                    })
+                    this.$router.push('/request')
+                }
+            });
+        },
+        appraiseBtn(){
+            Swal.fire({
+                title: 'มูลค่าทรัพย์สิน',
+                input: 'number',
+                icon: 'question',
+                confirmButtonText: 'ตกลง',
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                
+                preConfirm: (number) => {
+                    this.value = number
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            })
+            .then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'ประเมินมูลค่า',
+                        text: `คุณต้องการประเมินมูลค่า ${this.value} บาท ใช่หรือไม่?`,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        showCloseButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes',
+                        cancelButtonText: 'No',
+                    })
+                    .then((r) => {
+                        if(r.value){
+                            this.actionBtn('appraised')
+                            Swal.fire({
+                                title: 'ประมูลค่าสำเร็จ!',
+                                icon: 'success',
+                                showCloseButton: true,
+                                confirmButtonText: 'Okay'
+                            })
+                            this.$router.push('/request')
+                        }
+                    });
+                }
+            })
+        },
         async actionBtn(type){
             if(type === 'confirm'){
                 let request = {
                     id: this.request_id,
                     status: "Appointment required"
+                }
+                await EmployeeStore.dispatch('confirmRequest', request)
+            }
+            else if(type === 'exploring'){
+                let request = {
+                    id: this.request_id,
+                    status: "Exploring"
+                }
+                await EmployeeStore.dispatch('confirmRequest', request)
+            }
+            else if(type === 'appraised'){
+                let request = {
+                    id: this.request_id,
+                    status: "Appraised",
+                    value: this.value,
                 }
                 await EmployeeStore.dispatch('confirmRequest', request)
             }
@@ -206,10 +312,8 @@ export default {
         handleCoverSheetImage(){
             Swal.fire({
                 title: 'Cover sheet',
-                // text: 'Modal with a custom image.',
                 imageUrl: this.request.cover_sheet,
                 imageWidth: 400,
-                // imageHeight: 200,
                 imageAlt: 'Custom image',
             })
         },
@@ -260,6 +364,18 @@ export default {
                 imageWidth: 400,
                 imageAlt: 'Custom image',
             })
+        },
+        formatStatusTH(status){
+            return FormatThai.formatStatusTH(status)
+        },
+        formatTypeTH(type){
+            return FormatThai.formatTypeTH(type)
+        },
+        formatCreatedAtTH(dateTime){
+            if(!dateTime){
+                return 'รอตรวจสอบเอกสาร'
+            }
+            return moment(dateTime).format('DD-MM') + '-' + FormatThai.formatYearTH(moment(dateTime).format('YYYY')) + ' ' + moment(dateTime).format('HH:mm:ss')
         }
     }
 }

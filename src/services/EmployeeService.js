@@ -25,15 +25,11 @@ export default {
         }
     },
 
-    async confirmRequest(id, status){
+    async confirmRequest(request){
         try{
-            let url = `${api_endpoint}/api/employee/update-status/${id}`;
-            let body = {
-                id: id,
-                status: status
-            }
+            let url = `${api_endpoint}/api/employee/update-status/${request.id}`;
             let header = AuthService.getApiHeader();
-            let res = await Axios.post(url, body, header);
+            let res = await Axios.post(url, request, header);
             return res
         }catch (e){
             

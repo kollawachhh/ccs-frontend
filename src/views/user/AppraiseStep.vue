@@ -16,9 +16,9 @@
                 </div>
             </b-col>
             <b-col cols="7" class="h-100 px-0">
-                <span class="flex mt-4 font-bold">Welcome</span>
+                <span class="flex mt-4 font-bold">ยินดีต้อนรับ</span>
                 <span class="flex mt-1 username">{{user.name}}</span>
-                <span class="flex mt-1 username">({{user.role}})</span>
+                <span class="flex mt-1 username">({{formatRoleTH(user.role)}})</span>
             </b-col>
         </b-row>
         <div class="mb-5">
@@ -81,6 +81,7 @@
 <script>
 import Footer from '../../components/Footer.vue'
 import AuthUser from "@/store/AuthUser"
+import FormatThai from '@/services/FormatThai'
 export default {
     data() {
         return {
@@ -98,10 +99,10 @@ export default {
     mounted(){
         if (!this.isAuthen()) {
             Swal.fire({
-                title: "You don't have permission!!",
-                text: 'Please login',
+                title: "คุณไม่มีสิทธิ์เข้าถึงหน้านี้!!",
+                text: 'กรุณาลงชื่อเข้าใช้ระบบก่อน',
                 icon: 'warning',
-                confirmButtonText: 'Okay'
+                confirmButtonText: 'ตกลง'
             })
             this.$router.push("/")
         }
@@ -129,6 +130,9 @@ export default {
             if(AuthUser.getters.user != null){
                 return AuthUser.getters.isAuthen
             }
+        },
+        formatRoleTH(role){
+            return FormatThai.formatRoleTH(role)
         },
     }
 }

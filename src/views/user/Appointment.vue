@@ -56,10 +56,10 @@ export default {
     mounted(){
         if (!this.isAuthen()) {
             Swal.fire({
-                title: "You don't have permission!!",
-                text: 'Please login',
+                title: "คุณไม่มีสิทธิ์เข้าถึงหน้านี้!!",
+                text: 'กรุณาลงชื่อเข้าใช้ระบบก่อน',
                 icon: 'warning',
-                confirmButtonText: 'Okay'
+                confirmButtonText: 'ตกลง'
             })
             this.$router.push("/")
         }
@@ -99,7 +99,7 @@ export default {
             let request = {
                 id: this.request_id,
                 appointment: moment(this.date).format('YYYY-MM-DD') + " " + this.time + ':00',
-                status: 'Success',
+                status: 'Explore required',
             }
             await EmployeeStore.dispatch('appointment', request)
         }
