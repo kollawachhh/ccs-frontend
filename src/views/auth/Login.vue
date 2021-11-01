@@ -13,7 +13,7 @@
                   <div class="mb-4 username_wrapper">
                       <span>ชื่อผู้ใช้</span>
                       <div class="w-100 mt-2" v-bind:class="{'field-required' : this.errors === 'fields required' || this.errors === 'username required'}">
-                        <input v-model="form.username" class="w-100" type="text">
+                        <input v-model="form.username" class="w-100 " type="text">
                       </div>
                       
                   </div>
@@ -177,7 +177,7 @@ export default {
 
         }
         .submit_button{
-            background-color: #F3D158;
+            background-color: #FFC839;
             border:0;
             box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.25);
             border-radius: 5px;
