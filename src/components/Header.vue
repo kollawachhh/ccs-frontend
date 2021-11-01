@@ -1,7 +1,7 @@
 <template>
   <div class="header">
         <b-row class="text-center h-100 w-100 deleted-margin">
-            <b-col><button v-if="back" @click="backBtn" class="back">&#60;</button></b-col>
+            <b-col><button v-if="back" @click="backBtn(path)" class="back">&#60;</button></b-col>
             <b-col cols="6"><span>{{tab}}</span></b-col>
             <b-col><img src="/icons/header-ico.png" class="" alt=""></b-col>
         </b-row>
@@ -10,10 +10,15 @@
 
 <script>
 export default {
-    props:['tab', 'back'],
+    props:['tab', 'back', 'path'],
     methods:{
-        backBtn(){
-            this.$router.go(-1)
+        backBtn(path){
+            if(path === '-1'){
+                this.$router.go(-1)
+            }
+            else{
+                this.$router.push(path)
+            }
         },
     }
 }

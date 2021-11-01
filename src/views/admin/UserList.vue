@@ -1,34 +1,34 @@
 <template>
     <div class="w-100 h-100">
-        <Header tab="CCs" :back=true></Header>
+        <Header tab="CCs" :back=true path="/home"></Header>
         <div class="content_wrapper w-90 mt-4 mx-auto">
             <div class="header_content w-100">
                 <div class="flex w-100">
-                    <span v-if="this.role === 'Admin'" class="flex my-1 mx-auto">User List</span>
-                    <span v-if="this.role === 'Employee'" class="flex my-1 mx-auto">Customer List</span>
+                    <span v-if="this.role === 'Admin'" class="flex my-1 mx-auto">รายชื่อผู้ใช้งานในระบบ</span>
+                    <span v-if="this.role === 'Employee'" class="flex my-1 mx-auto">รายชื่อลูกค้าในระบบ</span>
                 </div>
-                <input v-model="searchUser" class="flex search_bar mx-auto" type="text" placeholder="Search">
+                <input v-model="searchUser" class="flex search_bar mx-auto" type="text" placeholder="ค้นหา">
             </div>
             <table class="w-100 h-90">
                 <thead class="w-100 table_head">
                     <tr class="flex my-2 w-100">
-                        <th id="id" class="id">ID</th>
-                        <th id="name" class="name">Name</th>
-                        <th id="login" class="login">Login</th>
+                        <th id="id" class="id">ไอดี</th>
+                        <th id="name" class="name">ชื่อ</th>
+                        <th id="login" class="login">เข้าใช้เมื่อ</th>
                     </tr>
                 </thead>
                 <div id="table_body" class="flex w-100 mt-2">
                     <tbody class="w-100">
                         <tr v-for="(user, index) in resultQuery" :key="index" class="flex w-100 py-1 row">
-                            <button class="flex w-full" @click="getDetail(user.id)">
+                            <button class="flex w-100" @click="getDetail(user.id)">
                                 <td id="id">{{user.id}}</td>
                                 <td id="name">{{user.name}}</td>
-                                <td id="login">{{user.updated_at}}</td>
+                                <td id="login">{{formatCreatedAtTH(user.updated_at)}}</td>
                             </button>
                         </tr>
                     </tbody>
                 </div>
-                <button @click="addBtn" class="mt-2 addBtn px-3 py-1"> Add</button>
+                <button @click="addBtn" class="mt-2 addBtn px-3 py-1">เพิ่มผู้ใช้</button>
             </table>
             
         </div>
@@ -42,6 +42,8 @@ import Footer from '../../components/Footer.vue'
 import AdminStore from "@/store/Admin"
 import EmployeeStore from "@/store/Employee"
 import AuthUser from "@/store/AuthUser"
+import moment from 'moment'
+import FormatThai from '@/services/FormatThai'
 export default {
     data() {
         return {
@@ -58,10 +60,10 @@ export default {
     mounted(){
         if (!this.isAuthen()) {
             Swal.fire({
-                title: "You don't have permission!!",
-                text: 'Please login',
+                title: "คุณไม่มีสิทธิ์เข้าถึงหน้านี้!!",
+                text: 'กรุณาลงชื่อเข้าใช้ระบบก่อน',
                 icon: 'warning',
-                confirmButtonText: 'Okay'
+                confirmButtonText: 'ตกลง'
             })
             this.$router.push("/")
         }
@@ -86,7 +88,7 @@ export default {
             this.allUsers = EmployeeStore.getters.customer
         },
         async getDetail(userId){
-            this.$router.push('/request/' + userId)
+            // this.$router.push('/request/' + userId)
         },
         isAuthen() {
             if(AuthUser.getters.user != null){
@@ -96,6 +98,12 @@ export default {
         addBtn(){
             this.$router.push('userForm')
         },
+        formatCreatedAtTH(dateTime){
+            if(!dateTime){
+                return 'รอตรวจสอบเอกสาร'
+            }
+            return moment(dateTime).format('DD-MM') + '-' + FormatThai.formatYearTH(moment(dateTime).format('YYYY')) + ' ' + moment(dateTime).format('HH:mm:ss')
+        }
     },
     computed: {
         resultQuery(){
@@ -144,6 +152,7 @@ export default {
             button{
                 background-color: #C6E5FF;
                 border:0px;
+                padding: 0px;
             }
         }
         #id{

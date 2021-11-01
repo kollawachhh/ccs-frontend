@@ -31,8 +31,8 @@ export default new Vuex.Store({
             let payload = await EmployeeService.getAllWaitingRequest();
             commit("fetch", payload.data)
         },
-        async confirmRequest({ commit }, { id, status }){
-            let payload = await EmployeeService.confirmRequest(id, status);
+        async confirmRequest({ commit }, request){
+            let payload = await EmployeeService.confirmRequest(request);
             commit("push", payload.data)
         },
         async appointment({ commit }, { id, appointment, status }){

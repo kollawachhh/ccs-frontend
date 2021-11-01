@@ -43,6 +43,7 @@
 import Header from '../../components/Header.vue'
 import Footer from '../../components/Footer.vue'
 import CustomerStore from "@/store/Customer"
+import AuthUser from "@/store/AuthUser"
 export default {
     data() {
         return {
@@ -63,7 +64,23 @@ export default {
         Header,
         Footer
     },
+    mounted(){
+        if (!this.isAuthen()) {
+            Swal.fire({
+                title: "คุณไม่มีสิทธิ์เข้าถึงหน้านี้!!",
+                text: 'กรุณาลงชื่อเข้าใช้ระบบก่อน',
+                icon: 'warning',
+                confirmButtonText: 'ตกลง'
+            })
+            this.$router.push("/")
+        }
+    },
     methods:{
+        isAuthen() {
+            if(AuthUser.getters.user != null){
+                return AuthUser.getters.isAuthen
+            }
+        },
         handleImage(e){
             const selectedImage = e.target.files[0]
             const reader = new FileReader()

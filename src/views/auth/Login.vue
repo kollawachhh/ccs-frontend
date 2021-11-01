@@ -11,23 +11,20 @@
           <div class="my-4">
               <form @submit.prevent="login" class="mb-3">
                   <div class="mb-4 username_wrapper">
-                      <span>Username :</span>
-                      <input v-model="form.username" class="userId w-100" type="text">
+                      <span>ชื่อผู้ใช้</span>
+                      <input v-model="form.username" class="userId w-100 mt-2" type="text">
                   </div>
                   <div class="mb-4 password_wrapper">
-                      <span>Password : </span>
-                      <div class="password w-100">
+                      <span>รหัสผ่าน</span>
+                      <div class="password w-100 mt-2">
                           <input v-model="form.password" class="password w-100" type="password">
                       </div>
                   </div>
                   <div >
-                      <button class="px-5 py-1 submit_button">Login</button>
+                      <button class="px-4 py-1 submit_button">ลงชื่อเข้าใช้</button>
                   </div>
               </form>
-              <a class="register" href="/register">register</a>
-          </div>
-          <div class="contract_wrapper">
-              <a class="contract" href="/contract">Contact us</a>
+              <a class="register" href="/register">ลงทะเบียน</a>
           </div>
       </div>
   </div>
@@ -59,7 +56,7 @@ export default {
                 // this.$swal("กรุณากรอกข้อมูลให้ครบ", "ตรวจสอบให้แน่ใจว่าใส่ข้อมูลครบทุกช่อง", "error")
               }
               else if(this.form.username == ""){
-                this.errors = 'email required'
+                this.errors = 'username required'
                 // this.$swal("กรุณากรอกอีเมลล์", "ตรวจสอบให้แน่ใจว่าใส่ข้อมูลครบทุกช่อง", "error")
               }
               else if(this.form.password == ""){
@@ -72,20 +69,20 @@ export default {
                 let res = await AuthUser.dispatch('login', this.form)
                 if (res.success) {
                     Swal.fire({
-                        title: 'Login Complete!',
-                        text: 'Welcome User',
+                        title: 'ลงชื่อเข้าใช้ สำเร็จ!',
+                        text: 'ยินดีต้อนรับ' + ' ' + AuthUser.getters.user.name,
                         icon: 'success',
-                        confirmButtonText: 'Okay'
+                        confirmButtonText: 'ตกลง'
                     })
                     this.$router.push('/home')
                 }
                 else {
-                    this.errors = 'email or password invalid.'
+                    this.errors = 'username or password invalid.'
                     Swal.fire({
-                        title: 'Login Incomplete!',
-                        text: 'Please try again.',
+                        title: 'ลงชื่อเข้าใช้ไม่สำเร็จ!',
+                        text: 'ลองใหม่อีกครั้ง.',
                         icon: 'error',
-                        confirmButtonText: 'Okay'
+                        confirmButtonText: 'ตกลง'
                     })
                     this.clearForm()
                 }

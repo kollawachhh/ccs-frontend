@@ -1,36 +1,36 @@
 <template>
     <div class="w-100 h-100">
-        <Header tab="CCs" :back=true></Header>
+        <Header tab="CCs" :back=true path="/home"></Header>
         <div class="content_wrapper w-90 mt-4 mx-auto">
             <div class="header_content w-100">
                 <div class="flex w-100">
-                    <span class="flex my-1 mx-auto">Request List</span>
+                    <span class="flex my-1 mx-auto">รายการคำขอประเมิน</span>
                 </div>
                 <!-- <input v-model="searchUser" class="flex search_bar mx-auto" type="text" placeholder="Search"> -->
                 <select v-model="date.month" class="flex w-50 search_bar mx-auto">
-                    <option v-for="(month, index) in months" :key="index" :value='month.name' class="bg-white text-primary">{{ month.name + ' - ' + date.year }}</option>
+                    <option v-for="(month, index) in months" :key="index" :value='month.name' class="bg-white text-primary">{{ month.th + ' - ' + formatYearTH(date.year) }}</option>
                 </select>
             </div>
             <table class="w-100 h-90">
                 <thead class="w-100 table_head">
                     <tr class="flex my-2 w-100">
-                        <th id="id" class="id">Type</th>
-                        <th id="name" class="name">Date</th>
-                        <th id="login" class="login">Status</th>
+                        <th id="id" class="id">ประเภท</th>
+                        <th id="name" class="name">วันที่สร้าง</th>
+                        <th id="login" class="login">สถานะ</th>
                     </tr>
                 </thead>
                 <div id="table_body" class="flex w-100 mt-2">
                     <tbody class="w-100">
                             <tr v-for="(request, index) in resultQuery" :key="index" class="flex w-100 py-1 row">
                                 <button class="flex w-100" @click="getDetail(request.id)">
-                                    <td id="id">{{request.type}}</td>
+                                    <td id="id">{{formatTypeTH(request.type)}}</td>
                                     <td id="name">{{getCreateTime(request.created_at)}}</td>
-                                    <td id="login">{{request.status}}</td>
+                                    <td id="login">{{formatStatusTH(request.status)}}</td>
                                 </button>
                             </tr>
                     </tbody>
                 </div>
-                <button v-if="role === 'Customer'" @click="addBtn" class="mt-2 addBtn px-3 py-1">Send request</button>
+                <button v-if="role === 'Customer'" @click="addBtn" class="mt-2 addBtn px-3 py-1">ส่งคำขอประเมิน</button>
             </table>
         </div>
         <Footer></Footer>
@@ -44,6 +44,7 @@ import CustomerStore from "@/store/Customer"
 import EmployeeStore from "@/store/Employee"
 import AuthUser from "@/store/AuthUser"
 import moment from 'moment'
+import FormatThai from '@/services/FormatThai'
 export default {
     data() {
         return {
@@ -57,18 +58,18 @@ export default {
                 day: ""
             },
             months:[
-                { id: '1', name: 'January' },
-                { id: '2', name: 'Febuary' },
-                { id: '3', name: 'March' },
-                { id: '4', name: 'April' },
-                { id: '5', name: 'May' },
-                { id: '6', name: 'June' },
-                { id: '7', name: 'July' },
-                { id: '8', name: 'August' },
-                { id: '9', name: 'September' },
-                { id: '10', name: 'October' },
-                { id: '11', name: 'November' },
-                { id: '12', name: 'December' },
+                { id: '1', name: 'January', th: 'มกราคม' },
+                { id: '2', name: 'Febuary', th: 'กุมภาพันธ์' },
+                { id: '3', name: 'March', th: 'มีนาคม' },
+                { id: '4', name: 'April', th: 'เมษายน' },
+                { id: '5', name: 'May', th: 'พฤษภาคม' },
+                { id: '6', name: 'June', th: 'มิถุนายน' },
+                { id: '7', name: 'July', th: 'กรกฎาคม' },
+                { id: '8', name: 'August', th: 'สิงหาคม' },
+                { id: '9', name: 'September', th: 'กันยายน' },
+                { id: '10', name: 'October', th: 'ตุลาคม' },
+                { id: '11', name: 'November', th: 'พฤศจิกายน' },
+                { id: '12', name: 'December', th: 'ธันวาคม' },
             ],
         }
     },
@@ -79,10 +80,10 @@ export default {
     mounted(){
         if (!this.isAuthen()) {
             Swal.fire({
-                title: "You don't have permission!!",
-                text: 'Please login',
+                title: "คุณไม่มีสิทธิ์เข้าถึงหน้านี้!!",
+                text: 'กรุณาลงชื่อเข้าใช้ระบบก่อน',
                 icon: 'warning',
-                confirmButtonText: 'Okay'
+                confirmButtonText: 'ตกลง'
             })
             this.$router.push("/")
         }
@@ -122,8 +123,17 @@ export default {
             this.$router.push('/appraise')
         },
         getCreateTime(time){
-            return moment(time).format("DD-MM-YYYY")
+            return moment(time).format("DD-MM") + '-' + this.formatYearTH(moment(time).format("YYYY"))
         },
+        formatStatusTH(status){
+            return FormatThai.formatStatusTH(status)
+        },
+        formatTypeTH(type){
+            return FormatThai.formatTypeTH(type)
+        },
+        formatYearTH(year){
+            return FormatThai.formatYearTH(year)
+        }
     },
     
     computed: {

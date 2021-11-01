@@ -4,16 +4,14 @@
               <div class="home_btn">
                 <button @click="backBtn" class="flex back">&#60;</button>
               </div>
-              <div class="noti_btn">
-                  <img src="/icons/noti-btn.png">
-                  <br>
-                  <span>แจ้งเตือน</span>
+                <div class="noti_btn w-25 deleted-margin">
+                  <img src="/icons/ccs-logo.png" class="w-75" alt="">
               </div>
         </div>
         <div class="content">
             <b-row class="flex text-center w-100 mb-5 mx-auto">
                 <b-col cols="4" class=""><img :src="user.image" class="profile"></b-col>
-                <b-col class="h-100"><span class="flex mt-4 username">{{user.role + ' : ' + user.name}}</span></b-col>
+                <b-col class="h-100"><span class="flex mt-4 username">{{formatRoleTH(user.role) + ' : ' + user.name}}</span></b-col>
             </b-row>
             <div class="w-90 h-50 mb-5 mx-auto user_detail_wrapper">
                 <div class="flex w-100 h-50">
@@ -28,7 +26,7 @@
                 </div>
                 
             </div>
-            <button @click="logout" class="logout px-3 py-1">Logout</button>
+            <button @click="logout" class="logout px-3 py-1">ออกจากระบบ</button>
         </div>
         <Footer></Footer>
     </div>
@@ -37,6 +35,7 @@
 <script>
 import Footer from '../../components/Footer.vue'
 import AuthUser from "@/store/AuthUser"
+import FormatThai from '@/services/FormatThai'
 export default {
     data(){
         return {
@@ -53,10 +52,10 @@ export default {
     mounted(){
         if (!this.isAuthen()) {
             Swal.fire({
-                title: "You don't have permission!!",
-                text: 'Please login',
+                title: "คุณไม่มีสิทธิ์เข้าถึงหน้านี้!!",
+                text: 'กรุณาลงชื่อเข้าใช้ระบบก่อน',
                 icon: 'warning',
-                confirmButtonText: 'Okay'
+                confirmButtonText: 'ตกลง'
             })
             this.$router.push("/")
         }
@@ -72,29 +71,32 @@ export default {
         },
         async logout() {
             Swal.fire({
-                title: 'Logout',
-                text: 'Are you sure?',
-                icon: 'warning',
+                title: 'ออกจากระบบ',
+                text: 'คุณต้องการออกจากระบบใช่หรือไม่?',
+                icon: 'question',
                 showCancelButton: true,
                 showCloseButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes',
-                cancelButtonText: 'No',
+                confirmButtonText: 'ใช่',
+                cancelButtonText: 'ไม่',
             })
             .then((r) => {
                 if(r.value){
                     AuthUser.dispatch('logout')
                     Swal.fire({
-                        title: 'Logout Complete!',
+                        title: 'ออกจากระบบสำเร็จ!',
                         icon: 'success',
                         showCloseButton: true,
-                        confirmButtonText: 'Okay'
+                        confirmButtonText: 'ตกลง'
                     })
                     this.$router.push('/')
                 }
             });
-        }
+        },
+        formatRoleTH(role){
+            return FormatThai.formatRoleTH(role)
+        },
     }
 }
 </script>
@@ -111,7 +113,6 @@ export default {
 }
 .noti_btn{
     margin-left: auto;
-    margin: 20px 20px 20px auto;
 }
 .content{
     height: 85%;
