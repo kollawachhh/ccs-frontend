@@ -98,6 +98,18 @@
             class="stepBtn mx-auto mt-3">
             ประเมิณมูลค่าทรัพย์สิน
         </button>
+        <button
+            v-if="this.request.status === 'Explore required'"
+            @click="exploreBtn"
+            class="stepBtn mx-auto mt-3">
+            Exploring
+        </button>
+        <button
+            v-if="this.request.status === 'Exploring'"
+            @click="appraiseBtn"
+            class="stepBtn mx-auto mt-3">
+            ประเมิณมูลค่าทรัพย์สิน
+        </button>
     </div>
     
     <Footer></Footer>
