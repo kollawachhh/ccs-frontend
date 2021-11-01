@@ -18,6 +18,9 @@ export default {
         else if(status === 'Success'){
             return 'เสร็จสิ้น'
         }
+        else{
+            return 'ปฏิเสธ'
+        }
     },
     formatTypeTH(type){
         if(type === 'Detached house'){

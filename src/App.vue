@@ -58,4 +58,11 @@ export default {
 .deleted-margin{
     margin: 0px;
 }
+.set-font-family{
+  font-family: 'Prompt', sans-serif;
+}
+.field-required{
+  border: 2px solid #bb2828;
+  border-radius: 10px;
+}
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="h-100">
+  <div class="h-100 set-font-family">
       <Header tab='ลงทะเบียน' :back=true path='/'></Header>
       <div class="content">
           <div class="mt-3">
@@ -9,41 +9,94 @@
               <form @submit.prevent="register" class="mb-3 h-100" action="">
                     <div class="form_wrapper h-100">
                             <div class="mb-4 username_wrapper">
-                                <span>รูปประจำตัว</span>
+                                <span 
+                                    class="font-bold">
+                                    รูปประจำตัว
+                                    <span 
+                                        v-if="this.errors === 'image required' || this.errors === 'fields required'" 
+                                        class="flex warning mx-2">
+                                        !
+                                    </span>
+                                </span>
+                                
                                 <img :src="this.form.image" alt="" class="w-50 my-2">
-                                <input @change="handleImage" class="first_color w-100" type="file" accept="image/*">
+                                <div v-bind:class="{'field-required': this.errors === 'image required' || this.errors === 'fields required'}">
+                                    <input @change="handleImage" class="first_color w-100" type="file" accept="image/*">
+                                </div>
+                                
                             </div>
                             <div class="mb-4 username_wrapper">
-                                <span>ชื่อผู้ใช้</span>
-                                <input v-model="form.username" class="second_color w-100" type="text">
-                            </div>
-                            <div class="mb-4 username_wrapper">
-                                <span>รหัสผ่าน</span>
-                                <div class="flex">
-                                    <input v-model="form.password" class="first_color password left" type="password" placeholder="ใส่รหัสผ่าน">
-                                    <input v-model="form.confirmPassword" class="first_color password right" type="password" placeholder="ยืนยันรหัสผ่าน">
+                                <span class="font-bold">ชื่อผู้ใช้</span>
+                                <div v-bind:class="{'field-required': this.errors === 'username required' || this.errors === 'fields required'}">
+                                    <input 
+                                        v-model="form.username" 
+                                        class="second_color w-100" 
+                                        type="text">
                                 </div>
                             </div>
                             <div class="mb-4 username_wrapper">
-                                <span>ชื่อ</span>
-                                <input v-model="form.name" class="second_color w-100" type="text">
+                                <span class="font-bold">รหัสผ่าน</span>
+                                <div class="flex w-100">
+                                    <div class="password left" v-bind:class="{'field-required': this.errors === 'password required' || this.errors === 'fields required' || this.errors === 'invalid password required'}">
+                                        <input 
+                                            v-model="form.password" 
+                                            class="first_color w-100 " 
+                                            type="password" 
+                                            placeholder="ใส่รหัสผ่าน">
+                                    </div>
+                                    <div class="password right" v-bind:class="{'field-required': this.errors === 'confirm_password required' || this.errors === 'fields required' || this.errors === 'invalid password required'}">
+                                        <input 
+                                            v-model="form.confirmPassword" 
+                                            class="first_color w-100 " 
+                                            type="password" 
+                                            placeholder="ยืนยันรหัสผ่าน">
+                                    </div>
+                                    
+                                </div>
                             </div>
                             <div class="mb-4 username_wrapper">
-                                <span>หมายเลขบัตรประชาชน</span>
-                                <input v-model="form.idCard" class="second_color w-100" type="text">
+                                <span class="font-bold">ชื่อ</span>
+                                <div v-bind:class="{'field-required': this.errors === 'name required' || this.errors === 'fields required'}">
+                                    <input 
+                                        v-model="form.name" 
+                                        class="second_color w-100" 
+                                        type="text">
+                                </div>
                             </div>
                             <div class="mb-4 username_wrapper">
-                                <span>เบอร์โทรศัพท์</span>
-                                <input v-model="form.tel" class="first_color w-100" type="text">
+                                <span class="font-bold">หมายเลขบัตรประชาชน</span>
+                                <div v-bind:class="{'field-required': this.errors === 'idCard required' || this.errors === 'fields required'}">
+                                    <input 
+                                        v-model="form.idCard" 
+                                        class="second_color w-100" 
+                                        type="text">
+                                </div>
                             </div>
                             <div class="mb-4 username_wrapper">
-                                <span>ที่อยู่</span>
-                                <textarea v-model="form.address" class="second_color address w-100" name="" id="" cols="30" rows="3"></textarea>
+                                <span class="font-bold">เบอร์โทรศัพท์</span>
+                                <div v-bind:class="{'field-required': this.errors === 'tel required' || this.errors === 'fields required'}">
+                                    <input 
+                                        v-model="form.tel" 
+                                        class="first_color w-100" 
+                                        type="text">
+                                </div>
+                            </div>
+                            <div class="mb-4 username_wrapper">
+                                <span class="font-bold">ที่อยู่</span>
+                                <div class="second_color" v-bind:class="{'field-required': this.errors === 'address required' || this.errors === 'fields required'}">
+                                    <textarea 
+                                        v-model="form.address" 
+                                        class="second_color address w-100 h-100" 
+                                        cols="30" 
+                                        rows="3"
+                                        >
+                                    </textarea>
+                                </div>
                             </div>
                         </div>
-                  <div >
-                      <button class="mt-3 px-3 py-1 submit_button">ยืนยัน</button>
-                  </div>
+                    <div>
+                      <button class="mt-3 px-3 py-1 submit_button font-bold">ยืนยัน</button>
+                    </div>
               </form>
           </div>
       </div>
@@ -67,6 +120,7 @@ export default {
                 address:"",
                 role:"Customer",
             },
+            errors: '',
         }
     },
     components:{
@@ -96,23 +150,111 @@ export default {
             })
             .then((r) => {
                 if(r.value){
-                    if(this.form.image === "" || 
-                       this.form.username === "" ||
-                       this.form.password === "" ||
-                       this.form.confirmPassword === "" ||
-                       this.form.name === "" ||
-                       this.form.idCard === "" ||
-                       this.form.tel === "" ||
+                    if(this.form.image === "/images/user-test-img.png" && 
+                       this.form.username === "" &&
+                       this.form.password === "" &&
+                       this.form.confirmPassword === "" &&
+                       this.form.name === "" &&
+                       this.form.idCard === "" &&
+                       this.form.tel === "" &&
                        this.form.address === ""){
-                            this.clearForm()
+                           this.errors = 'fields required'
                             Swal.fire({
                                 title: 'ลงทะเบียนไม่สำเร็จ!',
                                 icon: 'error',
                                 showCloseButton: true,
                                 confirmButtonText: 'ตกลง'
                             })
-                       }
-                    else{
+                    }
+                    else if(this.form.image === "/images/user-test-img.png"){
+                        this.errors = 'image required'
+                        Swal.fire({
+                            title: 'กรุณาแนบรูป!',
+                            icon: 'error',
+                            showCloseButton: true,
+                            confirmButtonText: 'ตกลง'
+                        })
+                    }
+                    else if(this.form.username === ''){
+                        this.errors = 'username required'
+                        Swal.fire({
+                            title: 'กรุณาใส่ชื่อผู้ใช้!',
+                            icon: 'error',
+                            showCloseButton: true,
+                            confirmButtonText: 'ตกลง'
+                        })
+                    }
+                    else if(this.form.password === ''){
+                        this.errors = 'password required'
+                        Swal.fire({
+                            title: 'กรุณาใส่ชื่อรหัสผ่าน!',
+                            icon: 'error',
+                            showCloseButton: true,
+                            confirmButtonText: 'ตกลง'
+                        })
+                    }
+                    else if(this.form.confirmPassword === ''){
+                        this.errors = 'confirm_password required'
+                        Swal.fire({
+                            title: 'กรุณาใส่ยืนยันรหัสผ่าน!',
+                            icon: 'error',
+                            showCloseButton: true,
+                            confirmButtonText: 'ตกลง'
+                        })
+                    }
+                    else if(this.form.name === ''){
+                        this.errors = 'name required'
+                        Swal.fire({
+                            title: 'กรุณาใส่ชื่อ!',
+                            icon: 'error',
+                            showCloseButton: true,
+                            confirmButtonText: 'ตกลง'
+                        })
+                    }
+                    else if(this.form.idCard === ''){
+                        this.errors = 'idCard required'
+                        Swal.fire({
+                            title: 'กรุณาใส่หมายเลขบัตรประชาชน!',
+                            icon: 'error',
+                            showCloseButton: true,
+                            confirmButtonText: 'ตกลง'
+                        })
+                    }
+                    else if(this.form.tel === ''){
+                        this.errors = 'tel required'
+                        Swal.fire({
+                            title: 'กรุณาใส่เบอร์โทรศัพท์!',
+                            icon: 'error',
+                            showCloseButton: true,
+                            confirmButtonText: 'ตกลง'
+                        })
+                    }
+                    else if(this.form.address === ''){
+                        this.errors = 'address required'
+                        Swal.fire({
+                            title: 'กรุณาใส่ที่อยู่!',
+                            icon: 'error',
+                            showCloseButton: true,
+                            confirmButtonText: 'ตกลง'
+                        })
+                    }
+                    else if(this.form.password !== this.form.confirmPassword ){
+                        this.errors = 'invalid password required'
+                        Swal.fire({
+                            title: 'ยืนยันรหัสผ่านไม่ถูกต้อง!',
+                            icon: 'error',
+                            showCloseButton: true,
+                            confirmButtonText: 'ตกลง'
+                        })
+                    }
+                    else if(this.form.image !== "/images/user-test-img.png" && 
+                       this.form.username !== "" &&
+                       this.form.password !== "" &&
+                       this.form.confirmPassword !== "" &&
+                       this.form.name !== "" &&
+                       this.form.idCard !== "" &&
+                       this.form.tel !== "" &&
+                       this.form.address !== ""){
                         let newCustomer = {
                             image: this.form.image,
                             username: this.form.username,
@@ -132,7 +274,6 @@ export default {
                         })
                         this.$router.push('/')
                     }
-                    
                 }
             });
         },
@@ -226,5 +367,8 @@ export default {
 .logo{
     width: 100px;
     height: 100px;
+}
+.warning{
+    color: #bb2828;
 }
 </style>

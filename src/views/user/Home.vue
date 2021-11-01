@@ -1,5 +1,5 @@
 <template>
-  <div class="h-100">
+  <div class="h-100 set-font-family">
       <div class="flex w-100">
               <div class="noti_btn w-25">
                   <img src="/icons/ccs-logo.png" class="w-75" alt="">
@@ -21,7 +21,7 @@
         <b-row v-if="user.role === 'Customer'" class="flex text-center h-25 w-100 deleted-margin">
             <b-col class="h-full">
                 <button @click="requsetListBtn" class="button yellow w-75 py-2 my-2">
-                    <img class="w-75 h-75" src="/icons/doc-btn.png" alt="">
+                    <img class="w-75 h-75" src="/icons/request-list-btn.png" alt="">
                 </button>
                 <br>
                 <span>รายการคำขอประเมิน</span>

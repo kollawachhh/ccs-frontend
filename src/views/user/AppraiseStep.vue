@@ -1,5 +1,5 @@
 <template>
-  <div class="h-100">
+  <div class="h-100 set-font-family">
       <div class="flex">
               <div class="home_btn mt-2 mx-3">
                 <button @click="backBtn" class="back">&#60;</button>
@@ -50,27 +50,27 @@
             </b-col>
         </b-row>
         <b-row class="flex text-center h-25 w-100 deleted-margin">
-            <b-col class="h-full">
-                <button 
-                    class="button old-pink w-75 py-2 my-2"
-                    v-bind:class="{'opacity-03':this.status === '' || this.status === 'Waiting approve'}">
-                    3
-                    <br>
-                    <img class="w-75 h-75" src="/icons/send-request.png" alt="">
-                </button>
-                <br>
-                <span>ส่งคำร้องขอประเมิน</span>
-            </b-col>
             <b-col class="h-100">
                 <button 
                     class="button old-blue w-75 py-2 my-2"
                     v-bind:class="{'opacity-03':this.status === '' || this.status === 'Waiting approve'}">
-                    4
+                    3
                     <br>
                     <img class="w-75 h-75" src="/icons/estate-btn.png" alt="">
                 </button>
                 <br>
                 <span>สถานะการประเมิน</span>
+            </b-col>
+            <b-col class="h-full">
+                <button 
+                    class="button old-pink w-75 py-2 my-2"
+                    v-bind:class="{'opacity-03':this.status === '' || this.status === 'Waiting approve'}">
+                    4
+                    <br>
+                    <img class="w-75 h-75" src="/icons/send-request.png" alt="">
+                </button>
+                <br>
+                <span>ส่งคำร้องขอประเมิน</span>
             </b-col>
         </b-row>
       </div>
