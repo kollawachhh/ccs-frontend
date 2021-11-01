@@ -1,5 +1,5 @@
 <template>
-  <div class="w-100 h-100">
+  <div class="w-100 h-100 set-font-family">
       <Header tab='CCs' :back=true></Header>
       <div class="flex h-90">
           <div class="background w-90 h-90 mx-auto mt-5">

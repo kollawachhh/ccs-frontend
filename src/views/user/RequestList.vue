@@ -1,12 +1,11 @@
 <template>
-    <div class="w-100 h-100">
+    <div class="w-100 h-100 set-font-family">
         <Header tab="CCs" :back=true path="/home"></Header>
         <div class="content_wrapper w-90 mt-4 mx-auto">
             <div class="header_content w-100">
                 <div class="flex w-100">
                     <span class="flex my-1 mx-auto">รายการคำขอประเมิน</span>
                 </div>
-                <!-- <input v-model="searchUser" class="flex search_bar mx-auto" type="text" placeholder="Search"> -->
                 <select v-model="date.month" class="flex w-50 search_bar mx-auto">
                     <option v-for="(month, index) in months" :key="index" :value='month.name' class="bg-white text-primary">{{ month.th + ' - ' + formatYearTH(date.year) }}</option>
                 </select>
@@ -25,7 +24,7 @@
                                 <button class="flex w-100" @click="getDetail(request.id)">
                                     <td id="id">{{formatTypeTH(request.type)}}</td>
                                     <td id="name">{{getCreateTime(request.created_at)}}</td>
-                                    <td id="login">{{formatStatusTH(request.status)}}</td>
+                                    <td id="login" v-bind:class="{'successText':request.status === 'Success', 'rejectText':request.status === 'Rejected'}">{{formatStatusTH(request.status)}}</td>
                                 </button>
                             </tr>
                     </tbody>
@@ -193,6 +192,7 @@ export default {
             button{
                 background-color: #C6E5FF;
                 border:0px;
+                padding: 0px;
             }
         }
         .name{
@@ -204,6 +204,13 @@ export default {
             border-radius: 5px;
             border: 0px;
             background-color: #0B4870;
+            box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
         }
+    }
+    .successText{
+        color: #439b56;
+    }
+    .rejectText{
+        color: #9b3030;
     }
 </style>

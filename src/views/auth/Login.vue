@@ -1,5 +1,5 @@
 <template>
-  <div class="h-100">
+  <div class="h-100 set-font-family">
       <Header tab='CCs'></Header>
       <div class="content">
           <div>
@@ -12,11 +12,14 @@
               <form @submit.prevent="login" class="mb-3">
                   <div class="mb-4 username_wrapper">
                       <span>ชื่อผู้ใช้</span>
-                      <input v-model="form.username" class="userId w-100 mt-2" type="text">
+                      <div class="w-100 mt-2" v-bind:class="{'field-required' : this.errors === 'fields required' || this.errors === 'username required'}">
+                        <input v-model="form.username" class="w-100" type="text">
+                      </div>
+                      
                   </div>
                   <div class="mb-4 password_wrapper">
                       <span>รหัสผ่าน</span>
-                      <div class="password w-100 mt-2">
+                      <div class="password w-100 mt-2" v-bind:class="{'field-required' : this.errors === 'fields required' || this.errors === 'password required'}">
                           <input v-model="form.password" class="password w-100" type="password">
                       </div>
                   </div>
@@ -53,15 +56,30 @@ export default {
             if (this.form.username == "" || this.form.password == "") {
               if(this.form.username == "" && this.form.password == ""){
                 this.errors = 'fields required'
-                // this.$swal("กรุณากรอกข้อมูลให้ครบ", "ตรวจสอบให้แน่ใจว่าใส่ข้อมูลครบทุกช่อง", "error")
+                Swal.fire({
+                    title: "กรุณากรอกข้อมูลให้ครบ", 
+                    text: "ตรวจสอบให้แน่ใจว่าใส่ข้อมูลครบทุกช่อง", 
+                    icon: "error",
+                    confirmButtonText: 'ตกลง'
+                })
               }
               else if(this.form.username == ""){
                 this.errors = 'username required'
-                // this.$swal("กรุณากรอกอีเมลล์", "ตรวจสอบให้แน่ใจว่าใส่ข้อมูลครบทุกช่อง", "error")
+                Swal.fire({
+                    title: "กรุณากรอกชื่อผู้ใช้", 
+                    text: "ตรวจสอบให้แน่ใจว่าใส่ข้อมูลครบทุกช่อง", 
+                    icon: "error",
+                    confirmButtonText: 'ตกลง'
+                })
               }
               else if(this.form.password == ""){
                 this.errors = 'password required'
-                // this.$swal("กรุณากรอกรหัสผ่าน", "ตรวจสอบให้แน่ใจว่าใส่ข้อมูลครบทุกช่อง", "error")
+                Swal.fire({
+                    title: "กรุณากรอกรหัสผ่าน", 
+                    text: "ตรวจสอบให้แน่ใจว่าใส่ข้อมูลครบทุกช่อง", 
+                    icon: "error",
+                    confirmButtonText: 'ตกลง'
+                })
               }
               
             }

@@ -1,5 +1,5 @@
 <template>
-    <div class="h-100">
+    <div class="h-100 set-font-family">
         <div class="home_btn">
             <button @click="backBtn" class="flex back mx-2">&#60;</button>
         </div>

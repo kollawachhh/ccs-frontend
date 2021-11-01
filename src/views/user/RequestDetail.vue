@@ -1,5 +1,5 @@
 <template>
-<div class="h-100 w-100">
+<div class="h-100 w-100 set-font-family">
     <div class="header">
         <b-row class="text-center h-100 w-100 deleted-margin">
             <b-col>
@@ -17,7 +17,6 @@
                 <span v-if="this.request.type === 'Developed housing'" class="flex text-left mb-3 mx-2">ชื่อโครงการ : {{this.request.project_name}}</span>
                 <span class="flex text-left mb-3 mx-2">นัดหมายวันประเมิน : {{formatCreatedAtTH(this.request.appointment)}}</span>
                 <span class="flex text-left mb-3 mx-2">สร้างเมื่อ : {{formatCreatedAtTH(this.request.created_at)}}</span>
-                <span class="flex text-left mx-2">มูลค่าทรัพย์สิน : {{this.value}} บาท</span>
             </div>
         </div>
         <div class="w-75 pt-2 mt-4 bottom">
@@ -72,20 +71,32 @@
         v-if="this.request.status === 'Appointment required'" 
         @click="appointBtn"
         class="stepBtn mt-3">
-        Appointment
+        นัดหมายวันประเมิน
     </button>
     <div v-if="this.role === 'Employee'" class="flex">
         <button
             v-if="this.request.status === 'Waiting approve'"
             @click="confirmBtn"
             class="stepBtn mx-auto mt-3">
-            Confirm
+            อนุมัติ
         </button>
         <button
             v-if="this.request.status === 'Waiting approve'"
             @click="rejectBtn"
             class="rejectBtn mx-auto mt-3">
-            Reject
+            ปฏิเสธ
+        </button>
+        <button
+            v-if="this.request.status === 'Explore required'"
+            @click="exploreBtn"
+            class="stepBtn mx-auto mt-3">
+            กำลังออกสำรวจ
+        </button>
+        <button
+            v-if="this.request.status === 'Exploring'"
+            @click="appraiseBtn"
+            class="stepBtn mx-auto mt-3">
+            ประเมิณมูลค่าทรัพย์สิน
         </button>
         <button
             v-if="this.request.status === 'Explore required'"
@@ -163,24 +174,24 @@ export default {
         },
         confirmBtn(){
             Swal.fire({
-                title: 'Confirm',
-                text: 'Are you sure?',
-                icon: 'warning',
+                title: 'ตรวจสอบความถูกต้องของเอกสาร',
+                text: 'คุณต้องการอนุมัติใช่หรือไม่?',
+                icon: 'question',
                 showCancelButton: true,
                 showCloseButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes',
-                cancelButtonText: 'No',
+                confirmButtonText: 'ใช่',
+                cancelButtonText: 'ไม่',
             })
             .then((r) => {
                 if(r.value){
                     this.actionBtn('confirm')
                     Swal.fire({
-                        title: 'Confirmed!',
+                        title: 'อนุมัติเรียบร้อย!',
                         icon: 'success',
                         showCloseButton: true,
-                        confirmButtonText: 'Okay'
+                        confirmButtonText: 'ตกลง'
                     })
                     this.$router.push('/request')
                 }
@@ -188,24 +199,24 @@ export default {
         },
         rejectBtn(){
             Swal.fire({
-                title: 'Reject',
-                text: 'Are you sure?',
-                icon: 'warning',
+                title: 'ปฏิเสธคำขอ',
+                text: 'คุณต้องการปฏิเสธคำขอประเมินนี้ใช่หรือไม่?',
+                icon: 'question',
                 showCancelButton: true,
                 showCloseButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes',
-                cancelButtonText: 'No',
+                confirmButtonText: 'ใช่',
+                cancelButtonText: 'ไม่',
             })
             .then((r) => {
                 if(r.value){
                     this.actionBtn('reject')
                     Swal.fire({
-                        title: 'Rejected!',
+                        title: 'ปฏิเสธคำขอเรียบร้อย!',
                         icon: 'success',
                         showCloseButton: true,
-                        confirmButtonText: 'Okay'
+                        confirmButtonText: 'ตกลง'
                     })
                     this.$router.push('/request')
                 }
@@ -213,24 +224,24 @@ export default {
         },
         exploreBtn(){
             Swal.fire({
-                title: 'Exploring',
-                text: 'Are you sure?',
-                icon: 'warning',
+                title: 'กำลังออกสำรวจ',
+                text: 'คุณต้องการอัพเดทสถานะคำขอนี้ใช่หรือไม่?',
+                icon: 'question',
                 showCancelButton: true,
                 showCloseButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes',
-                cancelButtonText: 'No',
+                confirmButtonText: 'ใช่',
+                cancelButtonText: 'ไม่',
             })
             .then((r) => {
                 if(r.value){
                     this.actionBtn('exploring')
                     Swal.fire({
-                        title: 'Exploring Confirmed!',
+                        title: 'อัพเดทสถานะเรียบร้อย!',
                         icon: 'success',
                         showCloseButton: true,
-                        confirmButtonText: 'Okay'
+                        confirmButtonText: 'ตกลง'
                     })
                     this.$router.push('/request')
                 }
@@ -255,13 +266,13 @@ export default {
                     Swal.fire({
                         title: 'ประเมินมูลค่า',
                         text: `คุณต้องการประเมินมูลค่า ${this.value} บาท ใช่หรือไม่?`,
-                        icon: 'warning',
+                        icon: 'question',
                         showCancelButton: true,
                         showCloseButton: true,
                         confirmButtonColor: '#3085d6',
                         cancelButtonColor: '#d33',
-                        confirmButtonText: 'Yes',
-                        cancelButtonText: 'No',
+                        confirmButtonText: 'ใช่',
+                        cancelButtonText: 'ไม่',
                     })
                     .then((r) => {
                         if(r.value){
@@ -270,7 +281,7 @@ export default {
                                 title: 'ประมูลค่าสำเร็จ!',
                                 icon: 'success',
                                 showCloseButton: true,
-                                confirmButtonText: 'Okay'
+                                confirmButtonText: 'ตกลง'
                             })
                             this.$router.push('/request')
                         }
@@ -311,7 +322,7 @@ export default {
         },
         handleCoverSheetImage(){
             Swal.fire({
-                title: 'Cover sheet',
+                title: 'ใบปะหน้าที่ขอประเมิน',
                 imageUrl: this.request.cover_sheet,
                 imageWidth: 400,
                 imageAlt: 'Custom image',
@@ -319,7 +330,7 @@ export default {
         },
         handleFeeReceiptImage(){
             Swal.fire({
-                title: 'Fee Receipt',
+                title: 'ใบเสร็จค่าธรรมเนียมการประเมิน',
                 imageUrl: this.request.fee_receipt,
                 imageWidth: 400,
                 imageAlt: 'Custom image',
@@ -327,7 +338,7 @@ export default {
         },
         handleContractImage(){
             Swal.fire({
-                title: 'Contract',
+                title: 'สัญญาซื้อขาย',
                 imageUrl: this.request.contract,
                 imageWidth: 400,
                 imageAlt: 'Custom image',
@@ -335,7 +346,7 @@ export default {
         },
         handleConstructionPermitImage(){
             Swal.fire({
-                title: 'Construction Permit',
+                title: 'ใบอนุญาตปลูกสร้าง หรือเอกสารแสดงกรรมสิทธิ์สิ่งปลูกสร้าง',
                 imageUrl: this.request.construction_permit,
                 imageWidth: 400,
                 imageAlt: 'Custom image',
@@ -343,7 +354,7 @@ export default {
         },
         handleTitleDeedImage(){
             Swal.fire({
-                title: 'Title Deed',
+                title: 'โฉนดที่ดิน + สารบัญจดทะเบียน',
                 imageUrl: this.request.title_deed,
                 imageWidth: 400,
                 imageAlt: 'Custom image',
@@ -351,7 +362,7 @@ export default {
         },
         handleMapImage(){
             Swal.fire({
-                title: 'Map',
+                title: 'แผนที่สังเขป',
                 imageUrl: this.request.map,
                 imageWidth: 400,
                 imageAlt: 'Custom image',
@@ -359,7 +370,7 @@ export default {
         },
         handlePlanImage(){
             Swal.fire({
-                title: 'Map',
+                title: 'แบบแปลน',
                 imageUrl: this.request.plan,
                 imageWidth: 400,
                 imageAlt: 'Custom image',
@@ -433,7 +444,7 @@ export default {
 }
 .rejectBtn{
     color:#fff;
-    padding: 10px 25px;
+    padding: 10px 20px;
     background-color: #9b370f;
     border: 0px;
     border-radius: 5px;
