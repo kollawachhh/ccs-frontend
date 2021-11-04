@@ -1,6 +1,6 @@
 <template>
   <div class="w-100 h-100 set-font-family">
-      <Header tab='CCs' :back=true></Header>
+      <Header tab='CCs' :back=true path="-1"></Header>
       <div class="flex h-90">
           <div class="background w-90 h-90 mx-auto mt-5">
               <img class="profile_image" :src="user.image" alt="">
@@ -11,13 +11,19 @@
                     <div class="flex w-100 h-50">
                         <div class="content-wrapper w-75 h-75 mx-auto">
                             <span class="flex mx-3 mt-4"><img class="flex icons font-bold mx-2" src="/icons/appointment-date.png" alt=""> วันที่ต้องการนัดหมาย :</span>
-                            <input v-model="date" class="flex w-75 mx-auto mt-4 px-2 date-input" type="date">
+                            <date-picker 
+                                v-model="date" 
+                                class="flex w-75 mx-auto mt-4 px-2 date-input"
+                                :clearable=false
+                                :disabled-date="notBeforeToday" 
+                                >
+                            </date-picker>
                         </div>
                     </div>
                     <div class="flex w-100 h-50">
                         <div class="content-wrapper w-75 h-75 mx-auto">
                             <span class="flex mx-3 mt-4"><img class="flex icons font-bold mx-2" src="/icons/appointment-time.png" alt="">เวลาที่ต้องการนัดหมาย :</span>
-                            <input v-model="time" class="flex w-75 mx-auto mt-4 px-2 date-input" type="time">
+                            <input v-model="time" class="flex mx-auto mt-4 px-2 time-input" type="time">
                         </div>
                     </div>
                     <button class="flex mx-auto submit-btn px-4 py-1 font-bold">ยืนยัน</button>
@@ -35,13 +41,16 @@ import Header from '../../components/Header.vue'
 import Footer from '../../components/Footer.vue'
 import AuthUser from "@/store/AuthUser"
 import EmployeeStore from "@/store/Employee"
+import CustomerStore from "@/store/Customer"
 import moment from 'moment'
+import DatePicker from 'vue2-datepicker';
 export default {
     data() {
         return {
             request_id: this.$route.params.id,
             date:'',
             time:'',
+            appointed_date: [],
             user: {
                 name: AuthUser.getters.user.name,
                 image: AuthUser.getters.user.image,
@@ -49,9 +58,13 @@ export default {
             },
         }
     },
+    created(){
+        this.fetchAllAppointedDate()
+    },
     components:{
         Header,
-        Footer
+        Footer,
+        DatePicker
     },
     mounted(){
         if (!this.isAuthen()) {
@@ -70,28 +83,49 @@ export default {
                 return AuthUser.getters.isAuthen
             }
         },
+        notBeforeToday(date) {
+            
+            return date < new Date(new Date());
+        },
+        async fetchAllAppointedDate(){
+            await CustomerStore.dispatch('getAllAppointedDate')
+            this.appointed_date = CustomerStore.getters.customer
+        },
         submit(){
             Swal.fire({
-                title: 'Submit',
-                text: 'Are you sure?',
+                title: 'นัดหมายวันประเมิน',
+                text: 'คุณต้องการนัดหมายใช่หรือไม่?',
                 icon: 'warning',
                 showCancelButton: true,
                 showCloseButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes',
-                cancelButtonText: 'No',
+                confirmButtonText: 'ใช่',
+                cancelButtonText: 'ไม่',
             })
             .then((r) => {
                 if(r.value){
-                    this.pushData();
-                    Swal.fire({
-                        title: 'Appointment Complete!',
-                        icon: 'success',
-                        showCloseButton: true,
-                        confirmButtonText: 'Okay'
-                    })
-                    this.$router.push('/request')
+                    if(this.date === '' ||
+                       this.time === ''){
+                        Swal.fire({
+                            title: 'นัดหมายวันประเมิน ไม่สำเร็จ!',
+                            text: 'กรอกข้อมูลไม่ครบ กรุณาลองใหม่',
+                            icon: 'error',
+                            showCloseButton: true,
+                            confirmButtonText: 'ตกลง'
+                        })
+                    }
+                    else{
+                        this.pushData();
+                        Swal.fire({
+                            title: 'นัดหมายวันประเมิน สำเร็จ!',
+                            icon: 'success',
+                            showCloseButton: true,
+                            confirmButtonText: 'ตกลง'
+                        })
+                        this.$router.push('/request')
+                    }
+                    
                 }
             });
         },
@@ -132,9 +166,12 @@ export default {
     height: 25px;
 }
 .date-input{
-    border:0;
-    border-radius: 10px;
-    
+    width: 70%;
+}
+.time-input{
+    width: 70%;
+    height: 35px;
+    border:1px solid #BCC8D6;
 }
 .submit-btn{
     border: 0px;

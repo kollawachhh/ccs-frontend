@@ -8,25 +8,42 @@
                   <img src="/icons/ccs-logo.png" class="w-75" alt="">
               </div>
         </div>
-        <div class="content">
+        <div v-if="this.user_id || this.role === 'Customer'" class="content">
             <b-row class="flex text-center w-100 mb-5 mx-auto">
                 <b-col cols="4" class=""><img :src="user.image" class="profile"></b-col>
                 <b-col class="h-100"><span class="flex mt-4 username">{{formatRoleTH(user.role) + ' : ' + user.name}}</span></b-col>
             </b-row>
-            <div class="w-90 h-50 mb-5 mx-auto user_detail_wrapper">
-                <div class="flex w-100 h-50">
-                    <div class="w-75 h-90 user_detail_top_wrapper">
-
+            <div class="w-90 h-25 mb-5 mx-auto user_detail_wrapper">
+                <div class="w-100 h-75">
+                    <div class="flex">
+                        <span class="flex mt-2 mx-2 font-bold">ข้อมูลส่วนตัว</span>
+                    </div>
+                    <div class="w-75 h-90 user_detail_top_wrapper py-2">
+                        <div class="w-100 h-90 overflow pt-2">
+                            <span class="flex mx-2">เบอร์ติดต่อ {{': ' + this.user.tel}}</span>
+                            <span class="flex mx-2 mt-2">สมัครสมาชิกเมื่อ {{': ' + formatDate(this.user.created_at)}}</span>
+                            <div class="flex w-100">
+                                <div class="">
+                                    <span class="flex w-100 mx-2 mt-2">ที่อยู่ </span>
+                                </div>
+                                <div class="mt-2">
+                                    <span>{{': ' + this.user.address}}</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="flex w-100 h-50">
-                    <div class="w-75 h-90 user_detail_bottom_wrapper">
-
-                    </div>
-                </div>
-                
             </div>
-            <button @click="logout" class="logout px-3 py-1">ออกจากระบบ</button>
+            <button v-if="!this.user_id" @click="logout" class="logout px-3 py-1">ออกจากระบบ</button>
+        </div>
+        <div v-if="!this.user_id && this.role !== 'Customer'" class="content h-50 mt-5 pt-5">
+            <img :src="user.image" class="profile">
+            <div class="w-100 mt-3">
+                <span class="mt-4 username mx-auto">{{user.name}}</span>
+                <br>
+                <span>({{formatRoleTH(user.role)}})</span>
+            </div>
+            <button @click="logout" class="logout px-3 py-1 mt-5">ออกจากระบบ</button>
         </div>
         <Footer></Footer>
     </div>
@@ -36,15 +53,35 @@
 import Footer from '../../components/Footer.vue'
 import AuthUser from "@/store/AuthUser"
 import FormatThai from '@/services/FormatThai'
+import moment from 'moment'
+import EmployeeStore from "@/store/Employee"
 export default {
     data(){
         return {
-            user: {
-                name: AuthUser.getters.user.name,
-                image: AuthUser.getters.user.image,
-                role: AuthUser.getters.user.role,
+            user_id: this.$route.params.id,
+            user:{
+                name: '',
+                image: "/images/user-test-img.png",
+                role: '',
+                tel: '',
+                created_at: '',
+                address: '',
             },
+            role: AuthUser.getters.user.role,
         }
+    },
+    created(){
+        if(this.user_id){
+            this.fetchUserDetails(this.user_id)
+        }
+        else{
+            this.user.name= AuthUser.getters.user.name
+            this.user.image= AuthUser.getters.user.image
+            this.user.role= AuthUser.getters.user.role
+            this.user.tel= AuthUser.getters.user.tel
+            this.user.created_at= AuthUser.getters.user.created_at
+            this.user.address= AuthUser.getters.user.address
+    }
     },
     components:{
         Footer
@@ -68,6 +105,13 @@ export default {
             if(AuthUser.getters.user != null){
                 return AuthUser.getters.isAuthen
             }
+        },
+        async fetchUserDetails(id){
+            await EmployeeStore.dispatch('getUserById', id)
+            this.user = EmployeeStore.getters.customer[0]
+        },
+        formatDate(date){
+            return moment(date).format('DD-MM-YYYY')
         },
         async logout() {
             Swal.fire({
@@ -168,20 +212,20 @@ export default {
     .user_detail_top_wrapper{
         background-color: #C6E5FF;
         border-radius: 5px;
-        margin-right: auto;
-        margin-left: 10px;
+        margin-right: 10px;
+        margin-left: auto;
         margin-top: 10px;
         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
         border-radius: 9px;
     }
-    .user_detail_bottom_wrapper{
-        background-color: #FAC2C1;
-        border-radius: 5px;
-        margin-right: 10px;
-        margin-left: auto;
-        margin-top: 5px;
-        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-        border-radius: 9px;
+    .overflow{
+        height: 97%;
+        overflow-y: scroll;
+        overflow-x: auto;
+    }
+    .employee_detail{}
+    .create{
+        width: 45%;
     }
 }
 </style>

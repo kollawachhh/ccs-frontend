@@ -72,8 +72,18 @@ const routes = [
     component: Appraise
   },
   {
+    path: '/appraise/:id',
+    name: 'Appraise step',
+    component: Appraise
+  },
+  {
     path: '/detail',
     name: 'AccountDetail',
+    component: AccountDetail
+  },
+  {
+    path: '/user/:id',
+    name: 'UserDetail',
     component: AccountDetail
   },
   {

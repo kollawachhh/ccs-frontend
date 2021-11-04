@@ -14,6 +14,18 @@ export default {
             
         }
     },
+
+    async getUserById(id){
+        try{
+            let url = `${api_endpoint}/api/employee/user/${id}`;
+            let header = AuthService.getApiHeader();
+            let res = await Axios.get(url, header);
+            return res
+        }catch (e){
+            
+        }
+    },
+
     async getAllWaitingRequest(){
         try{
             let url = `${api_endpoint}/api/employee/all-waiting-request`;
@@ -44,7 +56,6 @@ export default {
                 appointment: appointment,
                 status: status
             }
-            console.log(body.appointment);
             let header = AuthService.getApiHeader();
             let res = await Axios.post(url, body, header);
             return res

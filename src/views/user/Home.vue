@@ -28,10 +28,10 @@
             </b-col>
             <b-col class="h-100">
                 <button @click="requestBtn" class="button old-green w-75 py-2 my-2">
-                    <img class="w-75 h-75" src="/icons/doc-btn.png" alt="">
+                    <img class="w-75 h-75" src="/icons/document-btn.png" alt="">
                 </button>
                 <br>
-                <span>ขั้นตอนส่งคำขอประเมิน</span>
+                <span>สร้างคำขอประเมิน</span>
             </b-col>
         </b-row>
         <b-row v-if="user.role === 'Employee'" class="flex text-center h-25 w-100 deleted-margin">
@@ -44,7 +44,7 @@
             </b-col>
             <b-col class="h-100">
                 <button @click="requsetListBtn" class="button old-green w-75 py-2 my-2">
-                    <img class="w-75 h-75" src="/icons/doc-btn.png" alt="">
+                    <img class="w-75 h-75" src="/icons/send-request.png" alt="">
                 </button>
                 <br>
                 <span>รายการคำขอประเมินของลูกค้า</span>
@@ -59,11 +59,11 @@
                 <span>รายชื่อผู้ใช้งานในระบบ</span>
             </b-col>
             <b-col class="h-100">
-                <button class="button old-green w-75 py-2 my-2">
+                <!-- <button class="button old-green w-75 py-2 my-2">
                     <img class="w-75 h-75" src="/icons/doc-btn.png" alt="">
                 </button>
                 <br>
-                <span>อันนี้ไม่รู้เอาไรดี</span>
+                <span>อันนี้ไม่รู้เอาไรดี</span> -->
             </b-col>
         </b-row>
       </div>

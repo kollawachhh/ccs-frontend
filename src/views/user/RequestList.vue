@@ -14,7 +14,8 @@
                 <thead class="w-100 table_head">
                     <tr class="flex my-2 w-100">
                         <th id="id" class="id">ประเภท</th>
-                        <th id="name" class="name">วันที่สร้าง</th>
+                        <th v-if="role === 'Employee'" id="name" class="name">ชื่อ</th>
+                        <th v-if="role === 'Customer'" id="name" class="name">วันที่สร้าง</th>
                         <th id="login" class="login">สถานะ</th>
                     </tr>
                 </thead>
@@ -23,7 +24,8 @@
                             <tr v-for="(request, index) in resultQuery" :key="index" class="flex w-100 py-1 row">
                                 <button class="flex w-100" @click="getDetail(request.id)">
                                     <td id="id">{{formatTypeTH(request.type)}}</td>
-                                    <td id="name">{{getCreateTime(request.created_at)}}</td>
+                                    <td v-if="role === 'Employee'" id="name">{{request.name}}</td>
+                                    <td v-if="role === 'Customer'" id="name">{{getCreateTime(request.created_at)}}</td>
                                     <td id="login" v-bind:class="{'successText':request.status === 'Success', 'rejectText':request.status === 'Rejected'}">{{formatStatusTH(request.status)}}</td>
                                 </button>
                             </tr>

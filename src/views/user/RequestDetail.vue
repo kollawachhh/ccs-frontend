@@ -10,16 +10,26 @@
         </b-row>
     </div>
     <div class="w-90 h-75 pt-4 content-wrapper mx-auto mt-3">
-        <div class="w-75 top">
-            <div class="w-90 pt-3">
-                <span class="flex text-left mb-3 mx-2">ประเภท : {{formatTypeTH(this.request.type)}}</span>
-                <span class="flex text-left mb-3 mx-2">สถานะ : {{formatStatusTH(this.request.status)}}</span>
-                <span v-if="this.request.type === 'Developed housing'" class="flex text-left mb-3 mx-2">ชื่อโครงการ : {{this.request.project_name}}</span>
-                <span class="flex text-left mb-3 mx-2">นัดหมายวันประเมิน : {{formatCreatedAtTH(this.request.appointment)}}</span>
-                <span class="flex text-left mb-3 mx-2">สร้างเมื่อ : {{formatCreatedAtTH(this.request.created_at)}}</span>
+        <div class="flex form-wrapper head w-90 mb-4 mx-auto">
+            <div class="mx-3 my-1">
+                <img :src="this.image" class="profile" alt="">
+            </div>
+            <div class="mt-3">
+                <span class="flex mb-1"><span class="font-bold">{{"ชื่อ"}}</span>{{': ' + request.user.name}}</span>
+                <span class="flex">({{formatRoleTH(request.user.role)}})</span>
             </div>
         </div>
-        <div class="w-75 pt-2 mt-4 bottom">
+        <div class="w-75 top pt-2">
+            <span class="flex font-bold my-1 mx-3">รายละเอียด</span>
+            <div class="form-wrapper w-90 h-75 pt-2 mx-auto">
+                <span class="flex text-left mb-3 mx-2"><span class="font-bold">{{'ประเภท'}}</span>{{': ' + formatTypeTH(this.request.type)}}</span>
+                <span class="flex text-left mb-3 mx-2"><span class="font-bold">{{'สถานะ'}}</span><span v-bind:class="{'successText':request.status === 'Success', 'rejectText':request.status === 'Rejected'}">{{': ' + formatStatusTH(this.request.status)}}</span></span>
+                <span v-if="this.request.type === 'Developed housing'" class="flex text-left mb-3 mx-2"><span class="font-bold">{{'ชื่อโครงการ'}}</span>{{': ' + this.request.project_name}}</span>
+                <span class="flex w-100 text-left mb-3 mx-2"><span class="appointment font-bold">{{'นัดประเมิน:'}}</span>{{formatCreatedAtTH(this.request.appointment)}}</span>
+                <span class="flex text-left mb-3 mx-2"><span class="appointment font-bold">{{'สร้างเมื่อ:'}}</span>{{'' + formatCreatedAtTH(this.request.created_at)}}</span>
+            </div>
+        </div>
+        <div class="w-75 pt-2 mt-3 bottom">
             <span class="flex font-bold my-2 mx-3">เอกสาร</span>
             <div class="form-wrapper mx-auto w-90 h-75">
                 <div class="w-100 my-3">
@@ -99,7 +109,6 @@
             ประเมิณมูลค่าทรัพย์สิน
         </button>
     </div>
-    
     <Footer></Footer>
 </div>
   
@@ -115,10 +124,40 @@ import FormatThai from '@/services/FormatThai'
 export default {
     data() {
         return {
-            request:[],
+            request:{
+                appointment: '',
+                construction_permit: '',
+                contract: '',
+                cover_sheet: '',
+                created_at: '',
+                fee_receipt: '',
+                id: '',
+                map: '',
+                plan: '',
+                project_name: '',
+                status: '',
+                title_deed: '',
+                type: '',
+                updated_at: '',
+                user: {
+                    address: '',
+                    created_at: '',
+                    id: '',
+                    id_card: '',
+                    image: '',
+                    name: '',
+                    role: '',
+                    tel: '',
+                    updated_at: '',
+                    username: '',
+                },
+                user_id: '',
+                value: '',
+            },
             request_id: this.$route.params.id,
             role: AuthUser.getters.user.role,
             value: 0,
+            image: '/images/user-test-img.png',
         }
     },
     components:{
@@ -126,6 +165,15 @@ export default {
     },
     created(){
         this.fetchRequestById()
+        if(this.request.status === 'Success'){
+            Swal.fire({
+                title: "ทรัพย์สินได้ประเมินมูลค่าแล้ว​!!",
+                text: 'กรุณาติดต่อสินเชื่อเจ้าของเรื่อง',
+                icon: 'success',
+                confirmButtonText: 'ตกลง'
+            })
+            this.appraiseBtn()
+        }
     },
     mounted(){
         if (!this.isAuthen()) {
@@ -146,19 +194,28 @@ export default {
         },
         async fetchRequestById(){
             await CustomerStore.dispatch('getRequestDetailById', this.request_id)
-            this.request = CustomerStore.getters.customer
+            this.request = CustomerStore.getters.customer[0]
+            this.image = this.request.user.image
             if(this.request.value){
                this.value = this.request.value 
             }
-            if(this.request.status === 'Exploring' && role === 'Employee'){
+            if(this.request.status === 'Exploring' && this.role === 'Employee'){
                 this.appraiseBtn()
+            }
+            if(this.request.status === 'Success'){
+                Swal.fire({
+                    title: "ทรัพย์สินได้ประเมินมูลค่าแล้ว​!!",
+                    text: 'กรุณาติดต่อสินเชื่อเจ้าของเรื่อง',
+                    icon: 'success',
+                    confirmButtonText: 'ตกลง'
+                })
             }
         },
         backBtn(){
             this.$router.push('/request')
         },
         appointBtn(){
-            this.$router.push('/appointment/' + this.request_id)
+            this.$router.push('/appraise/' + this.request_id)
         },
         confirmBtn(){
             Swal.fire({
@@ -247,7 +304,6 @@ export default {
                 preConfirm: (number) => {
                     this.value = number
                 },
-                allowOutsideClick: () => !Swal.isLoading()
             })
             .then((result) => {
                 if (result.isConfirmed) {
@@ -266,7 +322,7 @@ export default {
                         if(r.value){
                             this.actionBtn('appraised')
                             Swal.fire({
-                                title: 'ประมูลค่าสำเร็จ!',
+                                title: 'ประเมินมูลค่าสำเร็จ!',
                                 icon: 'success',
                                 showCloseButton: true,
                                 confirmButtonText: 'ตกลง'
@@ -295,7 +351,7 @@ export default {
             else if(type === 'appraised'){
                 let request = {
                     id: this.request_id,
-                    status: "Appraised",
+                    status: "Success",
                     value: this.value,
                 }
                 await EmployeeStore.dispatch('confirmRequest', request)
@@ -375,7 +431,10 @@ export default {
                 return 'รอตรวจสอบเอกสาร'
             }
             return moment(dateTime).format('DD-MM') + '-' + FormatThai.formatYearTH(moment(dateTime).format('YYYY')) + ' ' + moment(dateTime).format('HH:mm:ss')
-        }
+        },
+        formatRoleTH(role){
+            return FormatThai.formatRoleTH(role)
+        },
     }
 }
 </script>
@@ -403,23 +462,37 @@ export default {
     border-radius: 10px;
 }
 .form-wrapper{
-    overflow-x: scroll;
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 .text-left{
     text-align: left;
 }
+.head{
+    color: #fff;
+    background-color: #366083;
+    height: 15%;
+    border-radius: 10px;
+}
 .top{
     background-color: #C6E5FF;
-    height: 45%;
+    height: 30%;
     border-radius: 10px;
     margin: 0px auto 0px 20px;
 }
 .bottom{
-    background-color: #FAC2C1;
+    background-color: #C6E5FF;
     height: 45%;
     border-radius: 10px;
     margin: 0px 20px 0px auto;
+}
+.profile{
+    width: 80px;
+    height: 80px;
+    border: 5px solid #BCC8D6;
+    border-radius: 100%;
+    background-color: #fff;
 }
 .stepBtn{
     color:#fff;
@@ -441,5 +514,14 @@ export default {
 }
 .deleted-margin{
     margin: 0px;
+}
+.appointment{
+    width: 34%;
+}
+.successText{
+    color: #439b56;
+}
+.rejectText{
+    color: #9b3030;
 }
 </style>

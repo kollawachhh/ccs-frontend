@@ -5,7 +5,6 @@
                 <img @click="homeBtn" src="/icons/home-footer.png" class="w-50 my-2" alt="">
             </b-col>
             <b-col cols="6">
-                <img src="/icons/middle-btn.png" class="w" alt="">
             </b-col>
             <b-col class="h-100">
                 <img @click="accountDetailBtn" :src="user.image" class="profile" alt="">
@@ -17,7 +16,7 @@
 <script>
 import AuthUser from "@/store/AuthUser"
 export default {
-    props:['tab'],
+    props:['tab', 'path', 'back'],
     data(){
         return {
             user: {
@@ -47,7 +46,7 @@ export default {
         },
         accountDetailBtn(){
             this.$router.push('/detail')
-        }
+        },
     }
 }
 </script>
@@ -75,6 +74,12 @@ export default {
         background-color: #fff;
         border-radius: 100%;
     }
+}
+.back{
+    color: #fff;
+    border: 0;
+    background-color: #0B4870;
+    font-size: 2rem;
 }
 .deleted-margin{
     margin: 0px;

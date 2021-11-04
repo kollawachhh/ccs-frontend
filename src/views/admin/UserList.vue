@@ -28,9 +28,8 @@
                         </tr>
                     </tbody>
                 </div>
-                <button @click="addBtn" class="mt-2 addBtn px-3 py-1">เพิ่มผู้ใช้</button>
+                <button v-if="this.role === 'Admin'" @click="addBtn" class="mt-2 addBtn px-3 py-1">เพิ่มผู้ใช้</button>
             </table>
-            
         </div>
         <Footer></Footer>
     </div>
@@ -88,7 +87,9 @@ export default {
             this.allUsers = EmployeeStore.getters.customer
         },
         async getDetail(userId){
-            // this.$router.push('/request/' + userId)
+            if(this.role === 'Employee'){
+                this.$router.push('/user/' + userId)
+            }
         },
         isAuthen() {
             if(AuthUser.getters.user != null){

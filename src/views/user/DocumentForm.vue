@@ -86,7 +86,7 @@
                 <div class="w-75 mx-auto my-3">
                     <span 
                         class="flex font-bold text-left">
-                        4.ใบอนุญาติปลูกสร้าง หรือ เอกสารแสดงกรรมสิทธิ์สิ่งปลูกสร้าง
+                        4.ใบอนุญาตปลูกสร้าง หรือ เอกสารแสดงกรรมสิทธิ์สิ่งปลูกสร้าง
                         <span
                             v-if="this.errors === 'construction_permit required' || this.errors === 'fields required'" 
                             class="flex warning mx-2">

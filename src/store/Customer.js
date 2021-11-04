@@ -39,6 +39,10 @@ export default new Vuex.Store({
             let payload = await CustomerService.getRequestDetailById(id);
             commit("fetch", payload.data)
         },
+        async getAllAppointedDate({ commit }){
+            let payload = await CustomerService.getAllAppointedDate();
+            commit("fetch", payload.data)
+        },
     },
 
     modules: {

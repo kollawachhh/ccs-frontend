@@ -43,4 +43,14 @@ export default {
             
         }
     },
+    async getAllAppointedDate(){
+        try{
+            let url = `${api_endpoint}/api/customer/request/appoint-date`;
+            let headers = AuthService.getApiHeader();
+            let res = await Axios.get(url, headers);
+            return res
+        }catch (e){
+            
+        }
+    },
 }

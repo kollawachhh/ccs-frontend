@@ -27,6 +27,10 @@ export default new Vuex.Store({
             let payload = await EmployeeService.getAllCustomers();
             commit("fetch", payload.data)
         },
+        async getUserById({ commit }, id){
+            let payload = await EmployeeService.getUserById(id);
+            commit("fetch", payload.data)
+        },
         async getAllWaitingRequest({ commit }){
             let payload = await EmployeeService.getAllWaitingRequest();
             commit("fetch", payload.data)
